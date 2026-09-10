@@ -1,0 +1,35 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: pedidos360-backend
+
+  datasource:
+    url: ${SPRING_DATASOURCE_URL:jdbc:h2:mem:pedidosdb;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE}
+    driverClassName: ${SPRING_DATASOURCE_DRIVER:org.h2.Driver}
+    username: ${SPRING_DATASOURCE_USERNAME:sa}
+    password: ${SPRING_DATASOURCE_PASSWORD:}
+
+  jpa:
+    database-platform: ${SPRING_JPA_PLATFORM:org.hibernate.dialect.H2Dialect}
+    hibernate:
+      ddl-auto: ${SPRING_JPA_DDL_AUTO:create-drop}
+    show-sql: false
+    defer-datasource-initialization: true
+
+  sql:
+    init:
+      mode: always
+      data-locations: classpath:data.sql
+
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+
+app:
+  security:
+    issuer: ${JWT_ISSUER:https://login.microsoftonline.com/common/v2.0}
+    audience: ${JWT_AUDIENCE:api://pedidos360-api}
+    allowed-origins: ${ALLOWED_ORIGINS:http://localhost:4200,http://localhost:5173,http://localhost:3000}

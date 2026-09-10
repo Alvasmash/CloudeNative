@@ -1,0 +1,74 @@
+### =========================================================================
+### PEDIDOS360 BACKEND - KIT DE PRUEBAS REST
+### Asignatura: DSY1107 - Desarrollo Cloud Native I
+### =========================================================================
+
+@baseUrl = http://localhost:8080
+
+### -------------------------------------------------------------------------
+### 1. CASO P�BLICO (200 OK sin autenticaci�n)
+### -------------------------------------------------------------------------
+GET {{baseUrl}}/public/health
+Accept: application/json
+
+###
+GET {{baseUrl}}/public/productos
+Accept: application/json
+
+###
+GET {{baseUrl}}/public/productos/1
+Accept: application/json
+
+
+### -------------------------------------------------------------------------
+### 2. CASO PROTEGIDO SIN TOKEN (Debe retornar 401 Unauthorized)
+### -------------------------------------------------------------------------
+GET {{baseUrl}}/api/pedidos
+Accept: application/json
+
+###
+GET {{baseUrl}}/api/profile
+Accept: application/json
+
+
+### -------------------------------------------------------------------------
+### 3. CASO TOKEN INV�LIDO (Debe retornar 401 Unauthorized)
+### -------------------------------------------------------------------------
+GET {{baseUrl}}/api/pedidos
+Authorization: Bearer token_falso_o_expirado_12345
+Accept: application/json
+
+
+### -------------------------------------------------------------------------
+### 4. LLAMADAS CON TOKEN V�LIDO (Reemplaza {{token}} con tu token de Azure AD)
+### -------------------------------------------------------------------------
+@token = PEGA_AQUI_TU_ACCESS_TOKEN_DE_AZURE_AD
+
+### Consultar perfil con token
+GET {{baseUrl}}/api/profile
+Authorization: Bearer {{token}}
+Accept: application/json
+
+### Listar pedidos con token
+GET {{baseUrl}}/api/pedidos
+Authorization: Bearer {{token}}
+Accept: application/json
+
+### Crear nuevo pedido (Requiere scope 'recurso.write')
+POST {{baseUrl}}/api/pedidos
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "clienteNombre": "Estudiante Duoc",
+  "clienteEmail": "estudiante@duocuc.cl",
+  "items": [
+    { "productoId": 1, "cantidad": 2 },
+    { "productoId": 5, "cantidad": 2 }
+  ]
+}
+
+### Acceso a panel de administrador (Requiere rol 'ADMIN')
+GET {{baseUrl}}/api/admin/pedidos
+Authorization: Bearer {{token}}
+Accept: application/json

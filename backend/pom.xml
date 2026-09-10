@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <!-- Parent est�ndar de Spring Boot (controla versiones de librer�as para evitar incompatibilidades) -->
+  <parent>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-parent</artifactId>
+    <version>3.4.3</version>
+    <relativePath/>
+  </parent>
+
+  <!-- Identificadores del proyecto del estudiante (Secci�n 002D) -->
+  <groupId>cl.duoc.seccion002d</groupId>
+  <artifactId>pedidos360-backend</artifactId>
+  <version>0.0.1-SNAPSHOT</version>
+  <name>pedidos360-backend</name>
+  <description>Backend Spring Boot Resource Server para Pedidos360 - Seccion 002D</description>
+
+  <properties>
+    <java.version>21</java.version>
+  </properties>
+
+  <dependencies>
+    <!-- Web: Habilita creaci�n de APIs REST y controladores (@RestController) -->
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-web</artifactId>
+    </dependency>
+
+    <!-- Spring Security: Provee el filtro de seguridad para proteger rutas -->
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-security</artifactId>
+    </dependency>
+
+    <!-- OAuth2 Resource Server: Lee y valida Access Tokens JWT emitidos por Azure AD (Microsoft Entra ID) -->
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-oauth2-resource-server</artifactId>
+    </dependency>
+
+    <!-- Spring Data JPA: Conecta las clases Java con las tablas de la base de datos usando Hibernate -->
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-data-jpa</artifactId>
+    </dependency>
+
+    <!-- Bean Validation: Valida que los datos que env�a el cliente (nombres, correos, cantidades) sean correctos -->
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-validation</artifactId>
+    </dependency>
+
+    <!-- H2 Database: Base de datos en memoria ultrarr�pida para desarrollo y pruebas locales sin instalar nada -->
+    <dependency>
+      <groupId>com.h2database</groupId>
+      <artifactId>h2</artifactId>
+      <scope>runtime</scope>
+    </dependency>
+
+    <!-- PostgreSQL Driver: Listo para conectar a base de datos Cloud (AWS RDS PostgreSQL) al desplegar -->
+    <dependency>
+      <groupId>org.postgresql</groupId>
+      <artifactId>postgresql</artifactId>
+      <scope>runtime</scope>
+    </dependency>
+
+    <!-- MySQL Driver: Alternativa para base de datos Cloud (AWS RDS MySQL) -->
+    <dependency>
+      <groupId>com.mysql</groupId>
+      <artifactId>mysql-connector-j</artifactId>
+      <scope>runtime</scope>
+    </dependency>
+
+    <!-- Testing: Herramientas para ejecutar pruebas automatizadas (JUnit 5, MockMvc) -->
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-test</artifactId>
+      <scope>test</scope>
+    </dependency>
+
+    <!-- Spring Security Test: Permite simular tokens JWT en pruebas sin necesidad de conectarse a internet -->
+    <dependency>
+      <groupId>org.springframework.security</groupId>
+      <artifactId>spring-security-test</artifactId>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <plugins>
+      <!-- Plugin para compilar y empaquetar el proyecto en un archivo .jar ejecutable -->
+      <plugin>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-maven-plugin</artifactId>
+      </plugin>
+    </plugins>
+  </build>
+</project>
