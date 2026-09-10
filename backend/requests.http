@@ -6,7 +6,7 @@
 @baseUrl = http://localhost:8080
 
 ### -------------------------------------------------------------------------
-### 1. CASO P�BLICO (200 OK sin autenticaci�n)
+### 1. CASO PBLICO (200 OK sin autenticacion)
 ### -------------------------------------------------------------------------
 GET {{baseUrl}}/public/health
 Accept: application/json
@@ -32,7 +32,7 @@ Accept: application/json
 
 
 ### -------------------------------------------------------------------------
-### 3. CASO TOKEN INV�LIDO (Debe retornar 401 Unauthorized)
+### 3. CASO TOKEN INVLIDO (Debe retornar 401 Unauthorized)
 ### -------------------------------------------------------------------------
 GET {{baseUrl}}/api/pedidos
 Authorization: Bearer token_falso_o_expirado_12345
@@ -40,7 +40,7 @@ Accept: application/json
 
 
 ### -------------------------------------------------------------------------
-### 4. LLAMADAS CON TOKEN V�LIDO (Reemplaza {{token}} con tu token de Azure AD)
+### 4. LLAMADAS CON TOKEN VLIDO (Reemplaza {{token}} con tu token de Azure AD)
 ### -------------------------------------------------------------------------
 @token = PEGA_AQUI_TU_ACCESS_TOKEN_DE_AZURE_AD
 

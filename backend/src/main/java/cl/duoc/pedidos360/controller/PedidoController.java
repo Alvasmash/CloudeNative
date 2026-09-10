@@ -21,11 +21,11 @@ import org.springframework.web.bind.annotation.RestController;
  * CONTROLADOR: PedidoController (Rutas Protegidas de Clientes)
  * =========================================================================
  * FUNCION: Expone operaciones para usuarios autenticados:
- *          - GET /api/profile: Consulta informaci�n y roles del usuario actual.
- *          - GET /api/pedidos: Lista pedidos (exige token v�lido).
+ *          - GET /api/profile: Consulta informacion y roles del usuario actual.
+ *          - GET /api/pedidos: Lista pedidos (exige token valido).
  *          - POST /api/pedidos: Crea un nuevo pedido (exige scope 'recurso.write').
  * CONECTA CON: PedidoService y el frontend Angular con MSAL.
- * EVALUACION (R�brica): "Operaci�n de lectura protegible y operaci�n de modificaci�n protegible".
+ * EVALUACION (Rbrica): "Operacion de lectura protegible y operacion de modificacion protegible".
  */
 @RestController
 @RequestMapping("/api")
@@ -49,7 +49,7 @@ public class PedidoController {
     }
 
     /**
-     * Listado de pedidos: Solo accesible con Access Token v�lido.
+     * Listado de pedidos: Solo accesible con Access Token valido.
      */
     @GetMapping("/pedidos")
     public List<Pedido> listarPedidos() {
@@ -67,9 +67,9 @@ public class PedidoController {
     }
 
     /**
-     * Creaci�n de un pedido:
+     * Creacion de un pedido:
      * - Requiere que el token contenga el scope delegado 'recurso.write' (definido en SecurityConfig).
-     * - Descuenta stock, genera el n�mero de orden y guarda en la base de datos.
+     * - Descuenta stock, genera el numero de orden y guarda en la base de datos.
      * - Retorna HTTP 201 Created con la orden creada y la cabecera Location.
      */
     @PostMapping("/pedidos")
@@ -78,7 +78,7 @@ public class PedidoController {
             Pedido nuevoPedido = pedidoService.crearPedido(dto, authentication.getName());
             return ResponseEntity.created(URI.create("/api/pedidos/" + nuevoPedido.getId())).body(nuevoPedido);
         } catch (IllegalArgumentException | IllegalStateException e) {
-            // Retorna 400 Bad Request si no hay stock o los datos son inv�lidos
+            // Retorna 400 Bad Request si no hay stock o los datos son invalidos
             return ResponseEntity.badRequest().body(Map.of("error", "Bad Request", "message", e.getMessage()));
         }
     }

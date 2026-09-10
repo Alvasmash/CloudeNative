@@ -28,9 +28,9 @@ import org.springframework.test.web.servlet.MockMvc;
  * =========================================================================
  * SUITE DE PRUEBAS DE SEGURIDAD Y API REST
  * =========================================================================
- * FUNCION: Valida autom�ticamente que todos los endpoints respondan con los
- *          c�digos HTTP exactos exigidos por la r�brica (200, 201, 401, 403, 204)
- *          tanto en escenarios an�nimos, autenticados, con scope y con rol ADMIN.
+ * FUNCION: Valida automaticamente que todos los endpoints respondan con los
+ *          codigos HTTP exactos exigidos por la rbrica (200, 201, 401, 403, 204)
+ *          tanto en escenarios annimos, autenticados, con scope y con rol ADMIN.
  */
 @SpringBootTest(properties = "spring.main.allow-bean-definition-overriding=true")
 @AutoConfigureMockMvc
@@ -39,7 +39,7 @@ class Pedidos360SecurityAndApiTests {
     @Autowired
     private MockMvc mockMvc;
 
-    // Configuraci�n de prueba para no requerir conexi�n real a internet con Azure AD durante los tests
+    // Configuracion de prueba para no requerir conexion real a internet con Azure AD durante los tests
     @TestConfiguration
     static class TestSecurityConfig {
         @Bean
@@ -60,7 +60,7 @@ class Pedidos360SecurityAndApiTests {
     }
 
     @Test
-    @DisplayName("1. Endpoint p�blico /public/health responde 200 OK sin credenciales")
+    @DisplayName("1. Endpoint publico /public/health responde 200 OK sin credenciales")
     void publicHealth_shouldReturn200() throws Exception {
         mockMvc.perform(get("/public/health"))
                 .andExpect(status().isOk())
@@ -69,7 +69,7 @@ class Pedidos360SecurityAndApiTests {
     }
 
     @Test
-    @DisplayName("2. Endpoint p�blico /public/productos responde 200 OK y entrega el cat�logo")
+    @DisplayName("2. Endpoint publico /public/productos responde 200 OK y entrega el catalogo")
     void publicProductos_shouldReturn200() throws Exception {
         mockMvc.perform(get("/public/productos"))
                 .andExpect(status().isOk())
@@ -86,7 +86,7 @@ class Pedidos360SecurityAndApiTests {
     }
 
     @Test
-    @DisplayName("4. Endpoint protegido /api/pedidos con token v�lido responde 200 OK")
+    @DisplayName("4. Endpoint protegido /api/pedidos con token valido responde 200 OK")
     void protectedPedidos_withToken_shouldReturn200() throws Exception {
         mockMvc.perform(get("/api/pedidos")
                 .with(jwt().jwt(jwt -> jwt.subject("test-user"))))
@@ -95,7 +95,7 @@ class Pedidos360SecurityAndApiTests {
     }
 
     @Test
-    @DisplayName("5. Endpoint protegido /api/profile con token v�lido responde 200 OK y datos del usuario")
+    @DisplayName("5. Endpoint protegido /api/profile con token valido responde 200 OK y datos del usuario")
     void protectedProfile_withToken_shouldReturn200() throws Exception {
         mockMvc.perform(get("/api/profile")
                 .with(jwt().jwt(jwt -> jwt.subject("cliente@pedidos360.cl"))))
@@ -159,7 +159,7 @@ class Pedidos360SecurityAndApiTests {
     }
 
     @Test
-    @DisplayName("9. GET /api/admin/pedidos con rol ROLE_ADMIN responde 200 OK con m�tricas")
+    @DisplayName("9. GET /api/admin/pedidos con rol ROLE_ADMIN responde 200 OK con metricas")
     void adminEndpoint_withAdminRole_shouldReturn200() throws Exception {
         mockMvc.perform(get("/api/admin/pedidos")
                 .with(jwt().authorities(new SimpleGrantedAuthority("ROLE_ADMIN"))))

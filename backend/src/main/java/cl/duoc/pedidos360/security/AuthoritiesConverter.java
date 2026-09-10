@@ -17,16 +17,16 @@ import org.springframework.security.oauth2.server.resource.authentication.JwtGra
  * FUNCION: Traduce los permisos y roles contenidos en el Access Token JWT
  *          en autoridades que Spring Security entiende internamente:
  *          1. Scopes delegados (claim 'scp'): se convierten en 'SCOPE_recurso.write' / 'SCOPE_recurso.read'.
- *          2. Roles de aplicaci�n de Azure AD (claim 'roles'): se convierten en 'ROLE_ADMIN' / 'ROLE_USER'.
+ *          2. Roles de aplicacion de Azure AD (claim 'roles'): se convierten en 'ROLE_ADMIN' / 'ROLE_USER'.
  * CONECTA CON: El bean JwtAuthenticationConverter en SecurityConfig.
- * EVALUACION (R�brica 40%): "Aplica autorizaci�n por rol cuando corresponde y lee roles y scopes desde los claims".
+ * EVALUACION (Rbrica 40%): "Aplica autorizacion por rol cuando corresponde y lee roles y scopes desde los claims".
  */
 public class AuthoritiesConverter implements Converter<Jwt, Collection<GrantedAuthority>> {
 
     private final JwtGrantedAuthoritiesConverter scopesConverter = new JwtGrantedAuthoritiesConverter();
 
     public AuthoritiesConverter() {
-        // Por convenci�n OAuth2 en Azure AD, los scopes vienen en el claim 'scp' separados por espacio
+        // Por convencin OAuth2 en Azure AD, los scopes vienen en el claim 'scp' separados por espacio
         scopesConverter.setAuthoritiesClaimName("scp");
         scopesConverter.setAuthorityPrefix("SCOPE_");
     }

@@ -5,7 +5,7 @@ import jakarta.validation.constraints.NotNull;
 
 /**
  * =========================================================================
- * DTO: EstadoPedidoDTO (Actualizaci�n de Estado)
+ * DTO: EstadoPedidoDTO (Actualizacion de Estado)
  * =========================================================================
  * FUNCION: Transporta el nuevo estado cuando un administrador actualiza la orden (ej: a EN_CAMINO).
  * CONECTA CON: El endpoint protegido PATCH /api/admin/pedidos/{id}/estado (exige ROLE_ADMIN).

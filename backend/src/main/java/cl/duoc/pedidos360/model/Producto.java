@@ -11,7 +11,7 @@ import jakarta.persistence.Table;
  * =========================================================================
  * ENTIDAD JPA: Producto
  * =========================================================================
- * FUNCION: Representa cada plato o bebida disponible en el cat�logo de Pedidos360.
+ * FUNCION: Representa cada plato o bebida disponible en el catalogo de Pedidos360.
  * CONECTA CON: Tabla 'productos' en la base de datos (H2 local o AWS RDS Cloud).
  */
 @Entity
@@ -27,7 +27,7 @@ public class Producto {
     @Column(nullable = false)
     private String nombre;
 
-    // Descripci�n con los ingredientes y detalles del plato
+    // Descripcin con los ingredientes y detalles del plato
     @Column(length = 500)
     private String descripcion;
 
@@ -35,7 +35,7 @@ public class Producto {
     @Column(nullable = false)
     private Double precio;
 
-    // Categor�a para organizar el men� (ej: "Pizzas", "Hamburguesas", "Bebidas")
+    // Categora para organizar el menu (ej: "Pizzas", "Hamburguesas", "Bebidas")
     @Column(nullable = false)
     private String categoria;
 
@@ -43,7 +43,7 @@ public class Producto {
     @Column(nullable = false)
     private Integer stock;
 
-    // Constructor vac�o obligatorio requerido por Hibernate/JPA
+    // Constructor vacioo obligatorio requerido por Hibernate/JPA
     public Producto() {}
 
     // Constructor completo para crear productos manualmente si se requiere
@@ -56,7 +56,7 @@ public class Producto {
         this.stock = stock;
     }
 
-    // M�todos Getters y Setters para lectura y escritura de atributos
+    // Mtodos Getters y Setters para lectura y escritura de atributos
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 

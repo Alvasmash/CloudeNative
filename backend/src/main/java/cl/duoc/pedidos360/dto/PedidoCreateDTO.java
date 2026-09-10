@@ -8,9 +8,9 @@ import java.util.List;
 
 /**
  * =========================================================================
- * DTO: PedidoCreateDTO (Formulario de Creaci�n de Pedido)
+ * DTO: PedidoCreateDTO (Formulario de Creacion de Pedido)
  * =========================================================================
- * FUNCION: Estructura y valida el JSON que el frontend Angular env�a al crear un pedido.
+ * FUNCION: Estructura y valida el JSON que el frontend Angular enviaa al crear un pedido.
  * CONECTA CON: El endpoint protegido POST /api/pedidos (que exige SCOPE_recurso.write).
  */
 public class PedidoCreateDTO {
@@ -19,12 +19,12 @@ public class PedidoCreateDTO {
     @NotBlank(message = "El nombre del cliente es obligatorio")
     private String clienteNombre;
 
-    // Correo electr�nico del cliente para confirmaci�n de la orden
+    // Correo electrunico del cliente para confirmacin de la orden
     @NotBlank(message = "El email del cliente es obligatorio")
-    @Email(message = "El formato de email no es v�lido")
+    @Email(message = "El formato de email no es valido")
     private String clienteEmail;
 
-    // Lista de productos solicitados (no puede ir vac�a)
+    // Lista de productos solicitados (no puede ir vacioa)
     @NotEmpty(message = "El pedido debe contener al menos un producto")
     @Valid // Valida cada ItemPedidoDTO de la lista
     private List<ItemPedidoDTO> items;

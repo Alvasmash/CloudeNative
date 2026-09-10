@@ -8,9 +8,9 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * CLASE PRINCIPAL: Pedidos360BackendApplication
  * =========================================================================
  * FUNCION: Punto de entrada principal para iniciar el backend Spring Boot.
- *          La anotaci�n @SpringBootApplication activa:
+ *          La anotacion @SpringBootApplication activa:
  *          1. @Configuration: Permite registrar componentes y beans.
- *          2. @EnableAutoConfiguration: Configura Tomcat, Spring Security y JPA autom�ticamente.
+ *          2. @EnableAutoConfiguration: Configura Tomcat, Spring Security y JPA automaticamente.
  *          3. @ComponentScan: Escanea todos los paquetes hijos para registrar Controllers, Services y Repositories.
  */
 @SpringBootApplication

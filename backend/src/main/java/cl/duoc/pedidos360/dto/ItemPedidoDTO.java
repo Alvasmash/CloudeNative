@@ -12,7 +12,7 @@ import jakarta.validation.constraints.NotNull;
  */
 public class ItemPedidoDTO {
 
-    // ID del producto a ordenar (debe existir en el cat�logo de productos)
+    // ID del producto a ordenar (debe existir en el catalogo de productos)
     @NotNull(message = "El ID del producto es obligatorio")
     private Long productoId;
 

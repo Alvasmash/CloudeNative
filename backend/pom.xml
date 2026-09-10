@@ -4,7 +4,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-  <!-- Parent est�ndar de Spring Boot (controla versiones de librer�as para evitar incompatibilidades) -->
+  <!-- Parent estandar de Spring Boot (controla versiones de libreras para evitar incompatibilidades) -->
   <parent>
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-parent</artifactId>
@@ -12,7 +12,7 @@
     <relativePath/>
   </parent>
 
-  <!-- Identificadores del proyecto del estudiante (Secci�n 002D) -->
+  <!-- Identificadores del proyecto del estudiante (Seccion 002D) -->
   <groupId>cl.duoc.seccion002d</groupId>
   <artifactId>pedidos360-backend</artifactId>
   <version>0.0.1-SNAPSHOT</version>
@@ -24,7 +24,7 @@
   </properties>
 
   <dependencies>
-    <!-- Web: Habilita creaci�n de APIs REST y controladores (@RestController) -->
+    <!-- Web: Habilita creacion de APIs REST y controladores (@RestController) -->
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-web</artifactId>
@@ -48,13 +48,13 @@
       <artifactId>spring-boot-starter-data-jpa</artifactId>
     </dependency>
 
-    <!-- Bean Validation: Valida que los datos que env�a el cliente (nombres, correos, cantidades) sean correctos -->
+    <!-- Bean Validation: Valida que los datos que enviaa el cliente (nombres, correos, cantidades) sean correctos -->
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-validation</artifactId>
     </dependency>
 
-    <!-- H2 Database: Base de datos en memoria ultrarr�pida para desarrollo y pruebas locales sin instalar nada -->
+    <!-- H2 Database: Base de datos en memoria ultrarrapida para desarrollo y pruebas locales sin instalar nada -->
     <dependency>
       <groupId>com.h2database</groupId>
       <artifactId>h2</artifactId>

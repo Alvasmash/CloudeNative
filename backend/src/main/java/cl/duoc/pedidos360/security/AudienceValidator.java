@@ -10,10 +10,10 @@ import org.springframework.security.oauth2.jwt.Jwt;
  * SEGURIDAD: AudienceValidator
  * =========================================================================
  * FUNCION: Validador de audiencia (claim 'aud' del JWT de Azure Active Directory).
- *          Verifica que el Access Token recibido fue emitido ESPEC�FICAMENTE
- *          para este backend y no para otra aplicaci�n de la nube.
+ *          Verifica que el Access Token recibido fue emitido ESPECFICAMENTE
+ *          para este backend y no para otra aplicacion de la nube.
  * CONECTA CON: El bean JwtDecoder en SecurityConfig.
- * EVALUACION (R�brica 40%): "El BFF valida issuer y audience de forma correcta".
+ * EVALUACION (Rbrica 40%): "El BFF valida issuer y audience de forma correcta".
  */
 public class AudienceValidator implements OAuth2TokenValidator<Jwt> {
 

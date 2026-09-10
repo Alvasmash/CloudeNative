@@ -13,12 +13,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 /**
  * =========================================================================
- * CONTROLADOR: PublicController (Rutas P�blicas)
+ * CONTROLADOR: PublicController (Rutas Pblicas)
  * =========================================================================
- * FUNCION: Expone operaciones que NO requieren autenticaci�n (acceso libre).
- * CONECTA CON: El frontend Angular para que cualquier visitante pueda ver el men�
+ * FUNCION: Expone operaciones que NO requieren autenticacion (acceso libre).
+ * CONECTA CON: El frontend Angular para que cualquier visitante pueda ver el menu
  *              y verificar la salud del backend sin necesidad de login.
- * EVALUACION (R�brica): "Una operaci�n p�blica que pueda ejecutarse sin autenticaci�n".
+ * EVALUACION (Rbrica): "Una operacion publica que pueda ejecutarse sin autenticacion".
  */
 @RestController
 @RequestMapping("/public")
@@ -44,7 +44,7 @@ public class PublicController {
     }
 
     /**
-     * Cat�logo p�blico de productos: Lista pizzas, hamburguesas y bebidas.
+     * Catalogo publico de productos: Lista pizzas, hamburguesas y bebidas.
      * Retorna HTTP 200 OK con el array de productos.
      */
     @GetMapping("/productos")

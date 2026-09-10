@@ -19,11 +19,11 @@ import org.springframework.transaction.annotation.Transactional;
  * =========================================================================
  * SERVICIO: PedidoService
  * =========================================================================
- * FUNCION: Controla el flujo transaccional de �rdenes de compra en Pedidos360:
- *          - Validaci�n de existencia de productos en el cat�logo.
- *          - Verificaci�n y descuento autom�tico de stock en cocina.
- *          - C�lculo matem�tico de subtotales por item y total del pedido.
- *          - Asignaci�n de c�digo �nico y estado inicial PENDIENTE.
+ * FUNCION: Controla el flujo transaccional de rdenes de compra en Pedidos360:
+ *          - Validacion de existencia de productos en el catalogo.
+ *          - Verificacin y descuento automatico de stock en cocina.
+ *          - Clculo matemtico de subtotales por item y total del pedido.
+ *          - Asignacin de codigo unico y estado inicial PENDIENTE.
  * CONECTA CON: PedidoRepository, ProductoRepository, PedidoController y AdminController.
  */
 @Service
@@ -37,7 +37,7 @@ public class PedidoService {
         this.productoRepository = productoRepository;
     }
 
-    // Listar todos los pedidos (usado por administraci�n)
+    // Listar todos los pedidos (usado por administracion)
     @Transactional(readOnly = true)
     public List<Pedido> listarTodos() {
         return pedidoRepository.findAll();
@@ -56,13 +56,13 @@ public class PedidoService {
     }
 
     /**
-     * Crea un pedido de forma at�mica: Si alg�n producto no tiene stock,
-     * la transacci�n se cancela (rollback) y no se modifica la base de datos.
+     * Crea un pedido de forma atmica: Si algun producto no tiene stock,
+     * la transaccion se cancela (rollback) y no se modifica la base de datos.
      */
     @Transactional
     public Pedido crearPedido(PedidoCreateDTO dto, String usuarioAutenticado) {
         Pedido pedido = new Pedido();
-        // Genera un c�digo de orden �nico y legible (ej: PED-C83E92B1)
+        // Genera un codigo de orden unico y legible (ej: PED-C83E92B1)
         pedido.setNumeroPedido("PED-" + UUID.randomUUID().toString().substring(0, 8).toUpperCase());
         pedido.setClienteNombre(dto.getClienteNombre());
         pedido.setClienteEmail(dto.getClienteEmail() != null && !dto.getClienteEmail().isBlank()
@@ -76,7 +76,7 @@ public class PedidoService {
         // Itera cada producto solicitado para validar stock y calcular montos
         for (ItemPedidoDTO itemDto : dto.getItems()) {
             Producto producto = productoRepository.findById(itemDto.getProductoId())
-                    .orElseThrow(() -> new IllegalArgumentException("Producto con ID " + itemDto.getProductoId() + " no encontrado en el men�"));
+                    .orElseThrow(() -> new IllegalArgumentException("Producto con ID " + itemDto.getProductoId() + " no encontrado en el menu"));
 
             if (producto.getStock() < itemDto.getCantidad()) {
                 throw new IllegalStateException("Stock insuficiente para: " + producto.getNombre() + ". Disponibles: " + producto.getStock());
@@ -86,7 +86,7 @@ public class PedidoService {
             producto.setStock(producto.getStock() - itemDto.getCantidad());
             productoRepository.save(producto);
 
-            // Calcular subtotal de esta l�nea
+            // Calcular subtotal de esta linea
             double subtotal = producto.getPrecio() * itemDto.getCantidad();
             ItemPedido item = new ItemPedido(null, pedido, producto.getId(), producto.getNombre(), itemDto.getCantidad(), producto.getPrecio(), subtotal);
             pedido.agregarItem(item);
@@ -94,7 +94,7 @@ public class PedidoService {
         }
 
         pedido.setTotal(total);
-        // Guarda el pedido y autom�ticamente sus items por cascada JPA
+        // Guarda el pedido y automaticamente sus items por cascada JPA
         return pedidoRepository.save(pedido);
     }
 
@@ -107,7 +107,7 @@ public class PedidoService {
         return pedidoRepository.save(pedido);
     }
 
-    // Elimina una orden (operaci�n reservada para el rol de administraci�n)
+    // Elimina una orden (operacion reservada para el rol de administracion)
     @Transactional
     public void eliminarPedido(Long id) {
         if (!pedidoRepository.existsById(id)) {

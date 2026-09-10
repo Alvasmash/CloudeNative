@@ -27,12 +27,12 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
  * =========================================================================
  * CONFIGURACION CENTRAL DE SEGURIDAD: SecurityConfig
  * =========================================================================
- * FUNCION: Define la pol�tica de seguridad global de la aplicaci�n:
+ * FUNCION: Define la poltica de seguridad global de la aplicacion:
  *          - Deshabilita CSRF (porque las APIs REST con JWT son STATELESS).
  *          - Habilita y configura CORS para permitir llamadas desde Angular (puerto 4200).
- *          - Define reglas de autorizaci�n por ruta (p�blico, autenticado, scopes, roles).
+ *          - Define reglas de autorizacion por ruta (publico, autenticado, scopes, roles).
  *          - Configura el Resource Server para validar la firma digital con Azure AD.
- * CONECTA CON: Todos los controladores REST de la aplicaci�n.
+ * CONECTA CON: Todos los controladores REST de la aplicacion.
  */
 @Configuration
 public class SecurityConfig {
@@ -48,30 +48,30 @@ public class SecurityConfig {
             RestAccessDeniedHandler accessDeniedHandler) throws Exception {
 
         http
-            // 1. Desactivar CSRF y configurar sesiones STATELESS (sin cookies de sesi�n)
+            // 1. Desactivar CSRF y configurar sesiones STATELESS (sin cookies de sesion)
             .csrf(csrf -> csrf.disable())
             .cors(withDefaults())
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 
-            // 2. Reglas de autorizaci�n de rutas
+            // 2. Reglas de autorizacion de rutas
             .authorizeHttpRequests(auth -> auth
-                // Rutas p�blicas accesibles por cualquiera sin iniciar sesi�n
+                // Rutas publicas accesibles por cualquiera sin iniciar sesion
                 .requestMatchers("/public/**").permitAll()
                 .requestMatchers("/h2-console/**").permitAll()
                 .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll() // Pre-flight CORS
 
-                // Crear pedidos requiere que el frontend env�e el scope delegado 'recurso.write'
+                // Crear pedidos requiere que el frontend enviae el scope delegado 'recurso.write'
                 .requestMatchers(HttpMethod.POST, "/api/pedidos/**").hasAuthority("SCOPE_recurso.write")
 
-                // Endpoints de administraci�n exigen que el usuario tenga asignado el App Role 'ADMIN' en Azure AD
+                // Endpoints de administracion exigen que el usuario tenga asignado el App Role 'ADMIN' en Azure AD
                 .requestMatchers("/api/admin/**").hasAuthority("ROLE_ADMIN")
 
-                // Cualquier otra ruta bajo /api/** exige estar autenticado con un token v�lido
+                // Cualquier otra ruta bajo /api/** exige estar autenticado con un token valido
                 .requestMatchers("/api/**").authenticated()
 
                 .anyRequest().permitAll())
 
-            // 3. Configurar OAuth2 Resource Server con validaci�n de JWT y manejadores de error personalizados
+            // 3. Configurar OAuth2 Resource Server con validacion de JWT y manejadores de error personalizados
             .oauth2ResourceServer(oauth2 -> oauth2
                 .authenticationEntryPoint(authenticationEntryPoint)
                 .accessDeniedHandler(accessDeniedHandler)
@@ -89,7 +89,7 @@ public class SecurityConfig {
     }
 
     /**
-     * Configura el decodificador de JWT para validar la firma con las llaves p�blicas de Microsoft (JWKS)
+     * Configura el decodificador de JWT para validar la firma con las llaves publicas de Microsoft (JWKS)
      * y validar tanto el emisor (issuer) como la audiencia (audience).
      */
     @Bean
@@ -100,13 +100,13 @@ public class SecurityConfig {
 
         NimbusJwtDecoder decoder;
         if (issuer.contains("{tenantid}") || issuer.contains("common")) {
-            // Permite desarrollo local y resoluci�n flexible de JWKS
+            // Permite desarrollo local y resolucion flexible de JWKS
             decoder = NimbusJwtDecoder.withJwkSetUri("https://login.microsoftonline.com/common/discovery/v2.0/keys").build();
         } else {
             decoder = NimbusJwtDecoder.withIssuerLocation(issuer).build();
         }
 
-        // Validador por defecto de firma, emisor y vigencia (fecha de expiraci�n)
+        // Validador por defecto de firma, emisor y vigencia (fecha de expiracin)
         OAuth2TokenValidator<Jwt> defaultValidator = JwtValidators.createDefaultWithIssuer(issuer);
         // Validador estricto de Audience (aud)
         OAuth2TokenValidator<Jwt> audienceValidator = new AudienceValidator(audience);

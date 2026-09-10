@@ -21,11 +21,11 @@ import org.springframework.web.bind.annotation.RestController;
  * =========================================================================
  * FUNCION: Expone operaciones de alta seguridad exclusivas para usuarios con el
  *          App Role 'ADMIN' en Azure AD:
- *          - GET /api/admin/pedidos: Reporte global con recaudaci�n total.
+ *          - GET /api/admin/pedidos: Reporte global con recaudacion total.
  *          - PATCH /api/admin/pedidos/{id}/estado: Cambiar estado del pedido.
  *          - DELETE /api/admin/pedidos/{id}: Cancelar/eliminar un pedido.
  * CONECTA CON: SecurityConfig (que exige ROLE_ADMIN) y PedidoService.
- * EVALUACION (R�brica 40%): "Aplica autorizaci�n por rol cuando corresponde".
+ * EVALUACION (Rbrica 40%): "Aplica autorizacion por rol cuando corresponde".
  */
 @RestController
 @RequestMapping("/api/admin/pedidos")
@@ -38,7 +38,7 @@ public class AdminController {
     }
 
     /**
-     * Listado administrativo: Calcula la recaudaci�n total de todos los pedidos.
+     * Listado administrativo: Calcula la recaudacion total de todos los pedidos.
      */
     @GetMapping
     public Map<String, Object> listarTodosConMetricas() {

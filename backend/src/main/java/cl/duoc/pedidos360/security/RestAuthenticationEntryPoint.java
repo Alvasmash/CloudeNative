@@ -16,11 +16,11 @@ import org.springframework.stereotype.Component;
  * =========================================================================
  * SEGURIDAD: RestAuthenticationEntryPoint (Manejador 401)
  * =========================================================================
- * FUNCION: Se activa cuando un cliente hace una petici�n a una ruta protegida
- *          sin enviar el token, o enviando un token vencido/inv�lido.
+ * FUNCION: Se activa cuando un cliente hace una peticion a una ruta protegida
+ *          sin enviar el token, o enviando un token vencido/invalido.
  *          Devuelve una respuesta HTTP 401 Unauthorized con formato JSON limpio.
  * CONECTA CON: SecurityFilterChain de Spring Security.
- * EVALUACION (R�brica 40%): "Responde con c�digos de error adecuados".
+ * EVALUACION (Rbrica 40%): "Responde con codigos de error adecuados".
  */
 @Component
 public class RestAuthenticationEntryPoint implements AuthenticationEntryPoint {
@@ -35,14 +35,14 @@ public class RestAuthenticationEntryPoint implements AuthenticationEntryPoint {
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException)
             throws IOException {
 
-        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED); // C�digo 401
+        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED); // Codigo 401
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
 
         Map<String, Object> body = new LinkedHashMap<>();
         body.put("timestamp", Instant.now().toString());
         body.put("status", HttpServletResponse.SC_UNAUTHORIZED);
         body.put("error", "Unauthorized");
-        body.put("message", "La solicitud requiere autenticaci�n con un Access Token JWT v�lido emitido por el IDaaS");
+        body.put("message", "La solicitud requiere autenticacion con un Access Token JWT valido emitido por el IDaaS");
         body.put("path", request.getRequestURI());
 
         objectMapper.writeValue(response.getOutputStream(), body);

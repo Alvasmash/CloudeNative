@@ -30,11 +30,11 @@ public class Pedido {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // C�digo legible �nico para identificar la orden (ej: "PED-A1B2C3D4")
+    // Codigo legible unico para identificar la orden (ej: "PED-A1B2C3D4")
     @Column(name = "numero_pedido", nullable = false, unique = true)
     private String numeroPedido;
 
-    // Nombre del cliente que orden�
+    // Nombre del cliente que orden
     @Column(name = "cliente_nombre", nullable = false)
     private String clienteNombre;
 
@@ -42,7 +42,7 @@ public class Pedido {
     @Column(name = "cliente_email", nullable = false)
     private String clienteEmail;
 
-    // Fecha y hora exacta de creaci�n
+    // Fecha y hora exacta de creacion
     @Column(name = "fecha_creacion", nullable = false)
     private LocalDateTime fechaCreacion;
 
@@ -55,8 +55,8 @@ public class Pedido {
     @Column(nullable = false)
     private Double total;
 
-    // Relaci�n OneToMany: Un pedido contiene muchos items.
-    // CascadeType.ALL: Si guardamos o borramos el pedido, sus items se guardan o borran autom�ticamente.
+    // Relacion OneToMany: Un pedido contiene muchos items.
+    // CascadeType.ALL: Si guardamos o borramos el pedido, sus items se guardan o borran automaticamente.
     @OneToMany(mappedBy = "pedido", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference
     private List<ItemPedido> items = new ArrayList<>();
@@ -73,7 +73,7 @@ public class Pedido {
         this.total = total;
     }
 
-    // M�todo helper para agregar un item asociando la relaci�n bidireccional
+    // Mtodo helper para agregar un item asociando la relacion bidireccional
     public void agregarItem(ItemPedido item) {
         items.add(item);
         item.setPedido(this);

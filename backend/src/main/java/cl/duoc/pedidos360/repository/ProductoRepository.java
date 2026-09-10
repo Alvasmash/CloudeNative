@@ -15,6 +15,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface ProductoRepository extends JpaRepository<Producto, Long> {
 
-    // M�todo generado autom�ticamente por Spring Data JPA para filtrar platos por categor�a
+    // Mtodo generado automaticamente por Spring Data JPA para filtrar platos por categora
     List<Producto> findByCategoriaIgnoreCase(String categoria);
 }

@@ -15,8 +15,8 @@ import jakarta.persistence.Table;
  * =========================================================================
  * ENTIDAD JPA: ItemPedido (Detalle de la Orden)
  * =========================================================================
- * FUNCION: Representa cada l�nea individual dentro de un pedido (ej: 2 Pizzas a $8.990 c/u = $17.980).
- * CONECTA CON: Tabla 'items_pedido' y establece la relaci�n N:1 con la orden 'Pedido'.
+ * FUNCION: Representa cada linea individual dentro de un pedido (ej: 2 Pizzas a $8.990 c/u = $17.980).
+ * CONECTA CON: Tabla 'items_pedido' y establece la relacion N:1 con la orden 'Pedido'.
  */
 @Entity
 @Table(name = "items_pedido")
@@ -26,8 +26,8 @@ public class ItemPedido {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // Relaci�n ManyToOne: Muchos items pertenecen a un �nico pedido.
-    // @JsonBackReference: Evita bucles infinitos de serializaci�n JSON entre Pedido e Item.
+    // Relacion ManyToOne: Muchos items pertenecen a un unico pedido.
+    // @JsonBackReference: Evita bucles infinitos de serializacion JSON entre Pedido e Item.
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "pedido_id", nullable = false)
     @JsonBackReference
