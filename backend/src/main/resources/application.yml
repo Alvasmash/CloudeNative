@@ -30,6 +30,6 @@ spring:
 
 app:
   security:
-    issuer: ${JWT_ISSUER:https://login.microsoftonline.com/common/v2.0}
-    audience: ${JWT_AUDIENCE:api://pedidos360-api}
+    issuer: ${JWT_ISSUER:https://login.microsoftonline.com/16c2a7cf-f000-475f-a847-f95ee0b36404/v2.0}
+    audience: ${JWT_AUDIENCE:aef48164-1df8-49e6-b9f2-c1d8953ea200}
     allowed-origins: ${ALLOWED_ORIGINS:http://localhost:4200,http://localhost:5173,http://localhost:3000}

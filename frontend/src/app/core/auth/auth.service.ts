@@ -2,7 +2,12 @@ import { Injectable, signal, computed, inject, PLATFORM_ID } from '@angular/core
 import { isPlatformBrowser } from '@angular/common';
 import { Router } from '@angular/router';
 import { MsalService, MsalBroadcastService } from '@azure/msal-angular';
-import { EventMessage, EventType, AccountInfo, AuthenticationResult } from '@azure/msal-browser';
+import {
+  EventMessage,
+  EventType,
+  AccountInfo,
+  AuthenticationResult
+} from '@azure/msal-browser';
 import { filter } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
 import { AppUser } from '../models/user-profile.model';
@@ -38,8 +43,9 @@ export class AuthService {
   }
 
   private initAuth(): void {
-    // 1. Verificar si hay usuario demo almacenado (para evaluacion)
+    // 1. Verificar si hay usuario demo almacenado
     const storedDemoUser = sessionStorage.getItem(DEMO_USER_STORAGE_KEY);
+
     if (storedDemoUser) {
       try {
         const user = JSON.parse(storedDemoUser) as AppUser;
@@ -49,30 +55,33 @@ export class AuthService {
         sessionStorage.removeItem(DEMO_USER_STORAGE_KEY);
       }
     }
-
-    // 2. Escuchar eventos de MSAL
+    // 3. Escuchar eventos de MSAL
     this.msalBroadcastService.msalSubject$
       .pipe(
-        filter((msg: EventMessage) =>
-          msg.eventType === EventType.LOGIN_SUCCESS ||
-          msg.eventType === EventType.ACQUIRE_TOKEN_SUCCESS ||
-          msg.eventType === EventType.ACTIVE_ACCOUNT_CHANGED
+        filter(
+          (msg: EventMessage) =>
+            msg.eventType === EventType.LOGIN_SUCCESS ||
+            msg.eventType === EventType.ACQUIRE_TOKEN_SUCCESS ||
+            msg.eventType === EventType.ACTIVE_ACCOUNT_CHANGED
         )
       )
       .subscribe((result: EventMessage) => {
         const payload = result.payload as AuthenticationResult;
+
         if (payload?.account) {
           this.msalService.instance.setActiveAccount(payload.account);
           this.processAccount(payload.account);
         }
       });
 
-    // 3. Revisar si ya existe una cuenta activa en MSAL
+    // 4. Revisar si ya existe una cuenta activa en MSAL
     const activeAccount = this.msalService.instance.getActiveAccount();
+
     if (activeAccount) {
       this.processAccount(activeAccount);
     } else {
       const accounts = this.msalService.instance.getAllAccounts();
+
       if (accounts.length > 0) {
         this.msalService.instance.setActiveAccount(accounts[0]);
         this.processAccount(accounts[0]);
@@ -85,8 +94,12 @@ export class AuthService {
    */
   private processAccount(account: AccountInfo): void {
     const claims = account.idTokenClaims as Record<string, any> | undefined;
+
     const roles: string[] = claims?.['roles'] || [];
-    const isAdmin = roles.includes('ADMIN') || roles.includes('ROLE_ADMIN');
+
+    const isAdmin =
+      roles.includes('ADMIN') ||
+      roles.includes('ROLE_ADMIN');
 
     const appUser: AppUser = {
       name: account.name || account.username || 'Usuario Azure AD',
@@ -100,37 +113,59 @@ export class AuthService {
   }
 
   /**
-   * Inicia sesion mediante Microsoft Entra ID (Azure AD) usando Popup
+   * Inicia sesión mediante Microsoft Entra ID (Azure AD)
+   * usando Popup.
    */
   async loginWithMicrosoft(): Promise<void> {
+    // Evita iniciar otra interacción mientras MSAL está procesando una anterior
+    if (this.isLoading()) {
+      return;
+    }
+
     this.isLoading.set(true);
+
     try {
-      // Si los placeholders de Azure no se han configurado aun, advertir amigablemente
-      if (environment.azure.clientId === 'TU_AZURE_CLIENT_ID_PLACEHOLDER') {
+      // Validar configuración de Azure
+      if (
+        environment.azure.clientId ===
+        'TU_AZURE_CLIENT_ID_PLACEHOLDER'
+      ) {
         this.toastService.warning(
-          'Azure AD no esta configurado con Client ID real. Puedes usar el modo Demo para probar el sistema.',
-          'Configuracion Azure'
+          'Azure AD no está configurado con Client ID real. Puedes usar el modo Demo para probar el sistema.',
+          'Configuración Azure'
         );
-        this.isLoading.set(false);
+
         return;
       }
 
-      const result = await this.msalService.loginPopup({
-        scopes: environment.azure.loginScopes,
-        prompt: 'select_account'
-      }).toPromise();
+      const result = await this.msalService
+        .loginPopup({
+          scopes: environment.azure.loginScopes,
+          prompt: 'select_account'
+        })
+        .toPromise();
 
       if (result?.account) {
         this.msalService.instance.setActiveAccount(result.account);
+
         this.processAccount(result.account);
-        this.toastService.success(`Bienvenido/a, ${result.account.name || 'Usuario'}!`);
-        this.router.navigate(['/menu']);
+
+        this.toastService.success(
+          `Bienvenido/a, ${result.account.name || 'Usuario'}!`
+        );
+
+        await this.router.navigate(['/menu']);
       }
     } catch (err: any) {
-      console.error('Error durante login con Azure AD:', err);
+      console.error(
+        'Error durante login con Azure AD:',
+        err
+      );
+
       this.toastService.error(
-        err.message || 'No se pudo completar la autenticacion con Microsoft',
-        'Error de Autenticacion'
+        err?.message ||
+        'No se pudo completar la autenticación con Microsoft',
+        'Error de Autenticación'
       );
     } finally {
       this.isLoading.set(false);
@@ -138,47 +173,84 @@ export class AuthService {
   }
 
   /**
-   * Cierra sesion tanto en Azure AD como en el estado local
+   * Cierra sesión tanto en Azure AD como en el estado local
    */
   async logout(): Promise<void> {
     this.currentUser.set(null);
-    sessionStorage.removeItem(DEMO_USER_STORAGE_KEY);
+
+    sessionStorage.removeItem(
+      DEMO_USER_STORAGE_KEY
+    );
 
     try {
-      const activeAccount = this.msalService.instance.getActiveAccount();
+      const activeAccount =
+        this.msalService.instance.getActiveAccount();
+
       if (activeAccount) {
-        await this.msalService.logoutPopup({
-          account: activeAccount
-        }).toPromise();
+        await this.msalService
+          .logoutPopup({
+            account: activeAccount
+          })
+          .toPromise();
       }
     } catch (err) {
-      console.warn('Error en logout de MSAL (posible sesion local limpia):', err);
+      console.warn(
+        'Error en logout de MSAL (posible sesión local limpia):',
+        err
+      );
     } finally {
-      this.toastService.info('Sesion cerrada correctamente');
-      this.router.navigate(['/login']);
+      this.toastService.info(
+        'Sesión cerrada correctamente'
+      );
+
+      await this.router.navigate(['/login']);
     }
   }
 
   /**
-   * Modo Demostracion / Evaluacion Academica:
-   * Permite a los evaluadores cambiar entre rol Cliente y Admin instantaneamente.
+   * Modo Demostración / Evaluación Académica:
+   * Permite a los evaluadores cambiar entre rol Cliente y Admin.
    */
-  setDemoUser(role: 'ADMIN' | 'USER'): void {
+  setDemoUser(
+    role: 'ADMIN' | 'USER'
+  ): void {
     const isAdmin = role === 'ADMIN';
+
     const demoUser: AppUser = {
-      name: isAdmin ? 'Profesor / Administrador' : 'Estudiante Duoc UC',
-      email: isAdmin ? 'admin.pedidos360@duocuc.cl' : 'estudiante@duocuc.cl',
-      username: isAdmin ? 'admin.pedidos360' : 'estudiante.duoc',
-      roles: isAdmin ? ['ROLE_ADMIN', 'ADMIN'] : ['ROLE_USER'],
+      name: isAdmin
+        ? 'Profesor / Administrador'
+        : 'Estudiante Duoc UC',
+
+      email: isAdmin
+        ? 'admin.pedidos360@duocuc.cl'
+        : 'estudiante@duocuc.cl',
+
+      username: isAdmin
+        ? 'admin.pedidos360'
+        : 'estudiante.duoc',
+
+      roles: isAdmin
+        ? ['ROLE_ADMIN', 'ADMIN']
+        : ['ROLE_USER'],
+
       isAdmin
     };
 
     this.currentUser.set(demoUser);
-    sessionStorage.setItem(DEMO_USER_STORAGE_KEY, JSON.stringify(demoUser));
-    this.toastService.success(
-      `Sesion iniciada en Modo Demo como ${isAdmin ? 'ADMINISTRADOR (ROLE_ADMIN)' : 'CLIENTE REGULAR'}`,
-      'Modo Demostracion'
+
+    sessionStorage.setItem(
+      DEMO_USER_STORAGE_KEY,
+      JSON.stringify(demoUser)
     );
+
+    this.toastService.success(
+      `Sesión iniciada en Modo Demo como ${isAdmin
+        ? 'ADMINISTRADOR (ROLE_ADMIN)'
+        : 'CLIENTE REGULAR'
+      }`,
+      'Modo Demostración'
+    );
+
     this.router.navigate(['/menu']);
   }
 }
