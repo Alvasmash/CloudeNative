@@ -26,7 +26,7 @@ const INITIAL_DEMO_ORDER: Pedido = {
       productoNombre: 'Pizza Margherita',
       cantidad: 1,
       precioUnitario: 8990.0,
-      subtotal: 8990.0
+      subtotal: 8990.0,
     },
     {
       id: 2,
@@ -34,13 +34,13 @@ const INITIAL_DEMO_ORDER: Pedido = {
       productoNombre: 'Hamburguesa Doble Smash',
       cantidad: 1,
       precioUnitario: 7490.0,
-      subtotal: 7490.0
-    }
-  ]
+      subtotal: 7490.0,
+    },
+  ],
 };
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class OrderService {
   private readonly http = inject(HttpClient);
@@ -73,11 +73,16 @@ export class OrderService {
    */
   crearPedido(dto: PedidoCreateDTO): Observable<Pedido> {
     return this.http.post<Pedido>(this.apiUrl, dto).pipe(
-      tap(nuevoPedido => {
-        this.toastService.success(`Pedido creado con éxito: ${nuevoPedido.numeroPedido}`);
+      tap((nuevoPedido) => {
+        this.toastService.success(
+          `Pedido creado con éxito: ${nuevoPedido.numeroPedido}`,
+        );
       }),
-      catchError(err => {
-        console.warn('Fallo llamada HTTP crearPedido, usando simulador local:', err);
+      catchError((err) => {
+        console.warn(
+          'Fallo llamada HTTP crearPedido, usando simulador local:',
+          err,
+        );
         const demoId = Math.floor(Math.random() * 9000) + 1000;
         const fakeOrder: Pedido = {
           id: demoId,
@@ -86,20 +91,22 @@ export class OrderService {
           clienteEmail: dto.clienteEmail,
           fechaCreacion: new Date().toISOString(),
           estado: EstadoPedido.PENDIENTE,
-          total: dto.items.reduce((sum, item) => sum + (item.cantidad * 8990), 0),
+          total: dto.items.reduce((sum, item) => sum + item.cantidad * 8990, 0),
           items: dto.items.map((i, idx) => ({
             id: idx + 1,
             productoId: i.productoId,
             productoNombre: `Producto #${i.productoId}`,
             cantidad: i.cantidad,
             precioUnitario: 8990,
-            subtotal: i.cantidad * 8990
-          }))
+            subtotal: i.cantidad * 8990,
+          })),
         };
         this.saveDemoOrder(fakeOrder);
-        this.toastService.success(`Pedido registrado localmente: ${fakeOrder.numeroPedido}`);
+        this.toastService.success(
+          `Pedido registrado localmente: ${fakeOrder.numeroPedido}`,
+        );
         return of(fakeOrder);
-      })
+      }),
     );
   }
 
@@ -108,10 +115,13 @@ export class OrderService {
    */
   getMisPedidos(): Observable<Pedido[]> {
     return this.http.get<Pedido[]>(this.apiUrl).pipe(
-      catchError(err => {
-        console.warn('Fallo llamada HTTP getMisPedidos, usando pedidos de sesion:', err);
+      catchError((err) => {
+        console.warn(
+          'Fallo llamada HTTP getMisPedidos, usando pedidos de sesion:',
+          err,
+        );
         return of(this.getStoredDemoOrders());
-      })
+      }),
     );
   }
 
@@ -120,11 +130,15 @@ export class OrderService {
    */
   getPedidoById(id: number): Observable<Pedido | null> {
     return this.http.get<Pedido>(`${this.apiUrl}/${id}`).pipe(
-      catchError(err => {
-        console.warn(`Fallo HTTP getPedidoById(${id}), buscando en pedidos locales:`, err);
-        const found = this.getStoredDemoOrders().find(p => p.id === Number(id)) || null;
+      catchError((err) => {
+        console.warn(
+          `Fallo HTTP getPedidoById(${id}), buscando en pedidos locales:`,
+          err,
+        );
+        const found =
+          this.getStoredDemoOrders().find((p) => p.id === Number(id)) || null;
         return of(found);
-      })
+      }),
     );
   }
 }

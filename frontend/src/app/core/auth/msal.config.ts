@@ -3,38 +3,28 @@ import {
   PublicClientApplication,
   InteractionType,
   BrowserCacheLocation,
-  LogLevel
+  LogLevel,
 } from '@azure/msal-browser';
 
 import {
   MsalGuardConfiguration,
   MsalInterceptorConfiguration,
-  ProtectedResourceScopes
+  ProtectedResourceScopes,
 } from '@azure/msal-angular';
 
 import { environment } from '../../../environments/environment';
 
-
-export function loggerCallback(
-  logLevel: LogLevel,
-  message: string
-): void {
-
+export function loggerCallback(logLevel: LogLevel, message: string): void {
   if (logLevel === LogLevel.Error) {
     console.error('[MSAL]', message);
-
   } else if (logLevel === LogLevel.Warning) {
     console.warn('[MSAL]', message);
   }
 }
 
-
 export function MSALInstanceFactory(): IPublicClientApplication {
-
   return new PublicClientApplication({
-
     auth: {
-
       // Client ID de la aplicación Angular "Pedidos360"
       clientId: environment.azure.clientId,
 
@@ -45,61 +35,43 @@ export function MSALInstanceFactory(): IPublicClientApplication {
       redirectUri: environment.azure.redirectUri,
 
       // Después de cerrar sesión
-      postLogoutRedirectUri:
-        environment.azure.redirectUri
+      postLogoutRedirectUri: environment.azure.redirectUri,
     },
 
     cache: {
-
       // Mantener la sesión en el navegador
-      cacheLocation:
-        BrowserCacheLocation.LocalStorage
+      cacheLocation: BrowserCacheLocation.LocalStorage,
     },
 
     system: {
-
       loggerOptions: {
-
         loggerCallback,
 
-        logLevel:
-          LogLevel.Warning,
+        logLevel: LogLevel.Warning,
 
-        piiLoggingEnabled:
-          false
-      }
-    }
+        piiLoggingEnabled: false,
+      },
+    },
   });
 }
 
-
 export function MSALGuardConfigFactory(): MsalGuardConfiguration {
-
   return {
-
     // El guard utilizará Redirect
-    interactionType:
-      InteractionType.Redirect,
+    interactionType: InteractionType.Redirect,
 
     authRequest: {
-
       // Scope solicitado al iniciar sesión
-      scopes:
-        environment.azure.loginScopes
-    }
+      scopes: environment.azure.loginScopes,
+    },
   };
 }
 
-
-export function MSALInterceptorConfigFactory():
-  MsalInterceptorConfiguration {
-
-  const protectedResourceMap =
-    new Map<
-      string,
-      Array<string | ProtectedResourceScopes> | null
-    >();
-
+export function MSALInterceptorConfigFactory(): MsalInterceptorConfiguration {
+  const protectedResourceMap = new Map<
+    string,
+    Array<string | ProtectedResourceScopes> | null
+  >();
 
   /*
    * API protegida.
@@ -113,31 +85,21 @@ export function MSALInterceptorConfigFactory():
    *
    * api://aef48164-1df8-49e6-b9f2-c1d8953ea200/recurso.write
    */
-  protectedResourceMap.set(
-    `${environment.apiUrl}/api/*`,
-    [
-      environment.azure.apiScope
-    ]
-  );
-
+  protectedResourceMap.set(`${environment.apiUrl}/api/*`, [
+    environment.azure.apiScope,
+  ]);
 
   /*
    * Endpoints públicos.
    *
    * No se agrega Access Token.
    */
-  protectedResourceMap.set(
-    `${environment.apiUrl}/public/*`,
-    null
-  );
-
+  protectedResourceMap.set(`${environment.apiUrl}/public/*`, null);
 
   return {
-
     // Las solicitudes protegidas utilizarán Redirect
-    interactionType:
-      InteractionType.Redirect,
+    interactionType: InteractionType.Redirect,
 
-    protectedResourceMap
+    protectedResourceMap,
   };
 }

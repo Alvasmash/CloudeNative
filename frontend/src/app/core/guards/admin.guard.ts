@@ -9,14 +9,22 @@ export const adminGuard: CanActivateFn = () => {
   const toastService = inject(ToastService);
 
   if (!authService.isAuthenticated()) {
-    toastService.warning('Debes iniciar sesión con rol de Administrador', 'Acceso Requerido');
-    return router.createUrlTree(['/login'], { queryParams: { returnUrl: '/admin' } });
+    toastService.warning(
+      'Debes iniciar sesión con rol de Administrador',
+      'Acceso Requerido',
+    );
+    return router.createUrlTree(['/login'], {
+      queryParams: { returnUrl: '/admin' },
+    });
   }
 
   if (authService.isAdmin()) {
     return true;
   }
 
-  toastService.error('No tienes permisos de Administrador (ROLE_ADMIN) para acceder a esta área', '403 Acceso Denegado');
+  toastService.error(
+    'No tienes permisos de Administrador (ROLE_ADMIN) para acceder a esta área',
+    '403 Acceso Denegado',
+  );
   return router.createUrlTree(['/menu']);
 };

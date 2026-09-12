@@ -10,11 +10,13 @@ const SEED_PRODUCTOS: Producto[] = [
   {
     id: 1,
     nombre: 'Pizza Margherita',
-    descripcion: 'Salsa de tomate casera, mozzarella fior di latte y albahaca fresca',
+    descripcion:
+      'Salsa de tomate casera, mozzarella fior di latte y albahaca fresca',
     precio: 8990.0,
     categoria: 'Pizzas',
     stock: 25,
-    imagenUrl: 'https://images.unsplash.com/photo-1604382355076-af4b0eb60143?w=600&auto=format&fit=crop&q=80'
+    imagenUrl:
+      'https://images.unsplash.com/photo-1604382355076-af4b0eb60143?w=600&auto=format&fit=crop&q=80',
   },
   {
     id: 2,
@@ -23,25 +25,30 @@ const SEED_PRODUCTOS: Producto[] = [
     precio: 9990.0,
     categoria: 'Pizzas',
     stock: 20,
-    imagenUrl: 'https://images.unsplash.com/photo-1628840042765-356cda07504e?w=600&auto=format&fit=crop&q=80'
+    imagenUrl:
+      'https://images.unsplash.com/photo-1628840042765-356cda07504e?w=600&auto=format&fit=crop&q=80',
   },
   {
     id: 3,
     nombre: 'Hamburguesa Doble Smash',
-    descripcion: 'Doble carne angus, doble cheddar, cebolla crispy y salsa especial',
+    descripcion:
+      'Doble carne angus, doble cheddar, cebolla crispy y salsa especial',
     precio: 7490.0,
     categoria: 'Hamburguesas',
     stock: 15,
-    imagenUrl: 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=600&auto=format&fit=crop&q=80'
+    imagenUrl:
+      'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=600&auto=format&fit=crop&q=80',
   },
   {
     id: 4,
     nombre: 'Hamburguesa Veggie Burger',
-    descripcion: 'Medallón de garbanzos y lentejas, palta fresca, tomate y lechuga',
+    descripcion:
+      'Medallón de garbanzos y lentejas, palta fresca, tomate y lechuga',
     precio: 6990.0,
     categoria: 'Hamburguesas',
     stock: 10,
-    imagenUrl: 'https://images.unsplash.com/photo-1520072959219-c595dc870360?w=600&auto=format&fit=crop&q=80'
+    imagenUrl:
+      'https://images.unsplash.com/photo-1520072959219-c595dc870360?w=600&auto=format&fit=crop&q=80',
   },
   {
     id: 5,
@@ -50,7 +57,8 @@ const SEED_PRODUCTOS: Producto[] = [
     precio: 1500.0,
     categoria: 'Bebidas',
     stock: 50,
-    imagenUrl: 'https://images.unsplash.com/photo-1622483767028-3f66f32aef97?w=600&auto=format&fit=crop&q=80'
+    imagenUrl:
+      'https://images.unsplash.com/photo-1622483767028-3f66f32aef97?w=600&auto=format&fit=crop&q=80',
   },
   {
     id: 6,
@@ -59,12 +67,13 @@ const SEED_PRODUCTOS: Producto[] = [
     precio: 2200.0,
     categoria: 'Bebidas',
     stock: 30,
-    imagenUrl: 'https://images.unsplash.com/photo-1553530666-ba11a7da3888?w=600&auto=format&fit=crop&q=80'
-  }
+    imagenUrl:
+      'https://images.unsplash.com/photo-1553530666-ba11a7da3888?w=600&auto=format&fit=crop&q=80',
+  },
 ];
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class ProductService {
   private readonly http = inject(HttpClient);
@@ -77,11 +86,14 @@ export class ProductService {
    */
   getProductos(): Observable<Producto[]> {
     return this.http.get<Producto[]>(this.apiUrl).pipe(
-      map(productos => this.enrichWithImages(productos)),
-      catchError(err => {
-        console.warn('Backend desconectado o no accesible, usando catalogo seed local:', err);
+      map((productos) => this.enrichWithImages(productos)),
+      catchError((err) => {
+        console.warn(
+          'Backend desconectado o no accesible, usando catalogo seed local:',
+          err,
+        );
         return of(SEED_PRODUCTOS);
-      })
+      }),
     );
   }
 
@@ -90,11 +102,11 @@ export class ProductService {
    */
   getProductoById(id: number): Observable<Producto | null> {
     return this.http.get<Producto>(`${this.apiUrl}/${id}`).pipe(
-      map(p => this.enrichSingleWithImage(p)),
+      map((p) => this.enrichSingleWithImage(p)),
       catchError(() => {
-        const found = SEED_PRODUCTOS.find(p => p.id === id) || null;
+        const found = SEED_PRODUCTOS.find((p) => p.id === id) || null;
         return of(found);
-      })
+      }),
     );
   }
 
@@ -102,15 +114,19 @@ export class ProductService {
    * Asigna imagenes atractivas si el backend solo retorna datos planos
    */
   private enrichWithImages(productos: Producto[]): Producto[] {
-    return productos.map(p => this.enrichSingleWithImage(p));
+    return productos.map((p) => this.enrichSingleWithImage(p));
   }
 
   private enrichSingleWithImage(p: Producto): Producto {
     if (p.imagenUrl) return p;
-    const seed = SEED_PRODUCTOS.find(s => s.id === p.id || s.nombre.toLowerCase() === p.nombre.toLowerCase());
+    const seed = SEED_PRODUCTOS.find(
+      (s) => s.id === p.id || s.nombre.toLowerCase() === p.nombre.toLowerCase(),
+    );
     return {
       ...p,
-      imagenUrl: seed?.imagenUrl || 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=600&auto=format&fit=crop&q=80'
+      imagenUrl:
+        seed?.imagenUrl ||
+        'https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=600&auto=format&fit=crop&q=80',
     };
   }
 }

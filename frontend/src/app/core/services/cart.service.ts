@@ -1,4 +1,10 @@
-﻿import { Injectable, signal, computed, inject, PLATFORM_ID } from '@angular/core';
+﻿import {
+  Injectable,
+  signal,
+  computed,
+  inject,
+  PLATFORM_ID,
+} from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import { Producto } from '../models/producto.model';
 import { PedidoCreateDTO } from '../models/pedido-create.model';
@@ -13,7 +19,7 @@ export interface CartItem {
 const CART_STORAGE_KEY = 'pedidos360_cart_items';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class CartService {
   private readonly toastService = inject(ToastService);
@@ -22,11 +28,11 @@ export class CartService {
   readonly items = signal<CartItem[]>([]);
 
   readonly totalCount = computed(() =>
-    this.items().reduce((acc, item) => acc + item.cantidad, 0)
+    this.items().reduce((acc, item) => acc + item.cantidad, 0),
   );
 
   readonly totalPrice = computed(() =>
-    this.items().reduce((acc, item) => acc + item.subtotal, 0)
+    this.items().reduce((acc, item) => acc + item.subtotal, 0),
   );
 
   readonly isEmpty = computed(() => this.items().length === 0);
@@ -59,7 +65,9 @@ export class CartService {
     if (cantidad <= 0) return false;
 
     const currentItems = [...this.items()];
-    const existingIndex = currentItems.findIndex(i => i.producto.id === producto.id);
+    const existingIndex = currentItems.findIndex(
+      (i) => i.producto.id === producto.id,
+    );
 
     if (existingIndex > -1) {
       const currentQty = currentItems[existingIndex].cantidad;
@@ -68,7 +76,7 @@ export class CartService {
       if (targetQty > producto.stock) {
         this.toastService.warning(
           `Stock insuficiente. Solo quedan ${producto.stock} unidades de ${producto.nombre}.`,
-          'Límite de Stock'
+          'Límite de Stock',
         );
         return false;
       }
@@ -76,13 +84,13 @@ export class CartService {
       currentItems[existingIndex] = {
         producto,
         cantidad: targetQty,
-        subtotal: targetQty * producto.precio
+        subtotal: targetQty * producto.precio,
       };
     } else {
       if (cantidad > producto.stock) {
         this.toastService.warning(
           `Solo hay ${producto.stock} unidades disponibles de ${producto.nombre}.`,
-          'Límite de Stock'
+          'Límite de Stock',
         );
         return false;
       }
@@ -90,7 +98,7 @@ export class CartService {
       currentItems.push({
         producto,
         cantidad,
-        subtotal: cantidad * producto.precio
+        subtotal: cantidad * producto.precio,
       });
     }
 
@@ -107,14 +115,14 @@ export class CartService {
     }
 
     const currentItems = [...this.items()];
-    const index = currentItems.findIndex(i => i.producto.id === productoId);
+    const index = currentItems.findIndex((i) => i.producto.id === productoId);
     if (index === -1) return false;
 
     const item = currentItems[index];
     if (nuevaCantidad > item.producto.stock) {
       this.toastService.warning(
         `No puedes agregar más de ${item.producto.stock} unidades.`,
-        'Stock Máximo'
+        'Stock Máximo',
       );
       return false;
     }
@@ -122,7 +130,7 @@ export class CartService {
     currentItems[index] = {
       ...item,
       cantidad: nuevaCantidad,
-      subtotal: nuevaCantidad * item.producto.precio
+      subtotal: nuevaCantidad * item.producto.precio,
     };
 
     this.items.set(currentItems);
@@ -131,7 +139,7 @@ export class CartService {
   }
 
   removeItem(productoId: number): void {
-    const filtered = this.items().filter(i => i.producto.id !== productoId);
+    const filtered = this.items().filter((i) => i.producto.id !== productoId);
     this.items.set(filtered);
     this.saveCartToStorage(filtered);
     this.toastService.info('Producto eliminado del carrito');
@@ -147,14 +155,17 @@ export class CartService {
   /**
    * Construye el DTO exacto PedidoCreateDTO esperado por el backend en POST /api/pedidos
    */
-  buildCheckoutPayload(clienteNombre: string, clienteEmail: string): PedidoCreateDTO {
+  buildCheckoutPayload(
+    clienteNombre: string,
+    clienteEmail: string,
+  ): PedidoCreateDTO {
     return {
       clienteNombre: clienteNombre.trim(),
       clienteEmail: clienteEmail.trim(),
-      items: this.items().map(item => ({
+      items: this.items().map((item) => ({
         productoId: item.producto.id,
-        cantidad: item.cantidad
-      }))
+        cantidad: item.cantidad,
+      })),
     };
   }
 }

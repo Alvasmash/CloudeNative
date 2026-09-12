@@ -7,7 +7,12 @@ import { ToastContainerComponent } from './shared/components/toast-container.com
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, HeaderComponent, FooterComponent, ToastContainerComponent],
+  imports: [
+    RouterOutlet,
+    HeaderComponent,
+    FooterComponent,
+    ToastContainerComponent,
+  ],
   template: `
     <div class="app-layout">
       <app-header />
@@ -18,20 +23,22 @@ import { ToastContainerComponent } from './shared/components/toast-container.com
       <app-toast-container />
     </div>
   `,
-  styles: [`
-    .app-layout {
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      background-color: #F8FAFC;
-      color: #0F172A;
-    }
-    .app-main {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-    }
-  `]
+  styles: [
+    `
+      .app-layout {
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        background-color: #f8fafc;
+        color: #0f172a;
+      }
+      .app-main {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+      }
+    `,
+  ],
 })
 export class AppComponent {
   title = 'Pedidos360';

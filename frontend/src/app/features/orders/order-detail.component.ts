@@ -16,15 +16,22 @@ import { ClpCurrencyPipe } from '../../shared/pipes/clp-currency.pipe';
     DatePipe,
     StatusBadgeComponent,
     OrderTimelineComponent,
-    ClpCurrencyPipe
+    ClpCurrencyPipe,
   ],
   template: `
     <div class="order-detail-page">
       <!-- Back navigation -->
       <div class="back-bar">
         <a routerLink="/pedidos" class="btn-back">
-          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M19 12H5M12 19l-7-7 7-7"/>
+          <svg
+            viewBox="0 0 24 24"
+            width="20"
+            height="20"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <path d="M19 12H5M12 19l-7-7 7-7" />
           </svg>
           Volver a Mis Pedidos
         </a>
@@ -38,8 +45,13 @@ import { ClpCurrencyPipe } from '../../shared/pipes/clp-currency.pipe';
       } @else if (!order()) {
         <div class="not-found-card">
           <h2>Pedido no encontrado</h2>
-          <p>No se pudo localizar la orden solicitada. Es posible que haya sido eliminada o que el ID sea inválido.</p>
-          <a routerLink="/pedidos" class="btn btn-primary">Volver al Historial</a>
+          <p>
+            No se pudo localizar la orden solicitada. Es posible que haya sido
+            eliminada o que el ID sea inválido.
+          </p>
+          <a routerLink="/pedidos" class="btn btn-primary"
+            >Volver al Historial</a
+          >
         </div>
       } @else {
         <!-- Main Detail Content -->
@@ -50,7 +62,8 @@ import { ClpCurrencyPipe } from '../../shared/pipes/clp-currency.pipe';
               <span class="banner-tag">Orden Confirmada</span>
               <h1 class="order-code">{{ order()!.numeroPedido }}</h1>
               <span class="order-timestamp">
-                Realizado el {{ order()!.fechaCreacion | date:'dd/MM/yyyy, HH:mm' }}
+                Realizado el
+                {{ order()!.fechaCreacion | date: 'dd/MM/yyyy, HH:mm' }}
               </span>
             </div>
             <div class="banner-status">
@@ -84,19 +97,31 @@ import { ClpCurrencyPipe } from '../../shared/pipes/clp-currency.pipe';
                       @for (item of order()!.items; track item.id) {
                         <tr>
                           <td>
-                            <strong class="item-product-name">{{ item.productoNombre }}</strong>
-                            <small class="item-ref">Cód. #{{ item.productoId }}</small>
+                            <strong class="item-product-name">{{
+                              item.productoNombre
+                            }}</strong>
+                            <small class="item-ref"
+                              >Cód. #{{ item.productoId }}</small
+                            >
                           </td>
                           <td class="text-center">{{ item.cantidad }}</td>
-                          <td class="text-right">{{ item.precioUnitario | clp }}</td>
-                          <td class="text-right item-subtotal-cell">{{ item.subtotal | clp }}</td>
+                          <td class="text-right">
+                            {{ item.precioUnitario | clp }}
+                          </td>
+                          <td class="text-right item-subtotal-cell">
+                            {{ item.subtotal | clp }}
+                          </td>
                         </tr>
                       }
                     </tbody>
                     <tfoot>
                       <tr>
-                        <td colspan="3" class="text-right foot-label">Total Pagado:</td>
-                        <td class="text-right foot-total">{{ order()!.total | clp }}</td>
+                        <td colspan="3" class="text-right foot-label">
+                          Total Pagado:
+                        </td>
+                        <td class="text-right foot-total">
+                          {{ order()!.total | clp }}
+                        </td>
                       </tr>
                     </tfoot>
                   </table>
@@ -111,7 +136,9 @@ import { ClpCurrencyPipe } from '../../shared/pipes/clp-currency.pipe';
                 <div class="info-list">
                   <div class="info-item">
                     <span class="info-label">Nombre del Cliente</span>
-                    <strong class="info-val">{{ order()!.clienteNombre }}</strong>
+                    <strong class="info-val">{{
+                      order()!.clienteNombre
+                    }}</strong>
                   </div>
                   <div class="info-item">
                     <span class="info-label">Correo de Notificación</span>
@@ -133,193 +160,205 @@ import { ClpCurrencyPipe } from '../../shared/pipes/clp-currency.pipe';
       }
     </div>
   `,
-  styles: [`
-    .order-detail-page {
-      max-width: 1100px;
-      margin: 0 auto;
-      padding: 32px 24px 64px;
-    }
-    .back-bar {
-      margin-bottom: 24px;
-    }
-    .btn-back {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      color: #64748B;
-      text-decoration: none;
-      font-weight: 600;
-      font-size: 0.9rem;
-      transition: color 0.15s;
-    }
-    .btn-back:hover {
-      color: #0F172A;
-    }
-    .detail-container {
-      display: flex;
-      flex-direction: column;
-      gap: 24px;
-    }
-    .summary-banner {
-      background: linear-gradient(135deg, #0F172A 0%, #1E293B 100%);
-      border-radius: 20px;
-      padding: 36px 32px;
-      color: #FFFFFF;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: 20px;
-      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.2);
-    }
-    .banner-info {
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-    }
-    .banner-tag {
-      font-size: 0.75rem;
-      font-weight: 700;
-      color: #FB923C;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-    }
-    .order-code {
-      font-size: 2.25rem;
-      font-weight: 900;
-      margin: 0;
-      letter-spacing: -0.02em;
-    }
-    .order-timestamp {
-      font-size: 0.875rem;
-      color: #94A3B8;
-    }
-    .timeline-card, .card {
-      background: #FFFFFF;
-      border: 1px solid #E2E8F0;
-      border-radius: 16px;
-      padding: 24px;
-      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
-    }
-    .card-section-title {
-      font-size: 1.1rem;
-      font-weight: 800;
-      color: #0F172A;
-      margin: 0 0 20px 0;
-    }
-    .detail-grid {
-      display: grid;
-      grid-template-columns: 1fr 340px;
-      gap: 24px;
-      align-items: flex-start;
-    }
-    .items-table-wrapper {
-      overflow-x: auto;
-    }
-    .items-table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 0.9rem;
-    }
-    .items-table th {
-      text-align: left;
-      color: #64748B;
-      font-weight: 600;
-      font-size: 0.775rem;
-      text-transform: uppercase;
-      letter-spacing: 0.04em;
-      padding-bottom: 12px;
-      border-bottom: 2px solid #F1F5F9;
-    }
-    .items-table td {
-      padding: 14px 0;
-      border-bottom: 1px solid #F1F5F9;
-      color: #334155;
-    }
-    .item-product-name {
-      display: block;
-      color: #0F172A;
-    }
-    .item-ref {
-      color: #94A3B8;
-      font-size: 0.75rem;
-    }
-    .item-subtotal-cell {
-      font-weight: 700;
-      color: #0F172A;
-    }
-    .text-center { text-align: center; }
-    .text-right { text-align: right; }
-    .foot-label {
-      font-weight: 700;
-      color: #0F172A;
-      font-size: 1rem;
-      padding-top: 16px;
-    }
-    .foot-total {
-      font-weight: 900;
-      font-size: 1.4rem;
-      color: #F97316;
-      padding-top: 16px;
-    }
-    .info-list {
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
-    }
-    .info-item {
-      display: flex;
-      flex-direction: column;
-      gap: 2px;
-    }
-    .info-label {
-      font-size: 0.75rem;
-      color: #94A3B8;
-      text-transform: uppercase;
-      font-weight: 600;
-    }
-    .info-val {
-      font-size: 0.95rem;
-      color: #0F172A;
-    }
-    .loading-box, .not-found-card {
-      text-align: center;
-      padding: 64px 24px;
-      background: #FFFFFF;
-      border: 1px solid #E2E8F0;
-      border-radius: 16px;
-    }
-    .spinner {
-      width: 36px;
-      height: 36px;
-      border: 3px solid #E2E8F0;
-      border-top-color: #F97316;
-      border-radius: 50%;
-      animation: spin 0.8s linear infinite;
-      margin: 0 auto 16px;
-    }
-    @keyframes spin { to { transform: rotate(360deg); } }
-    .btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      padding: 10px 20px;
-      border-radius: 10px;
-      font-weight: 600;
-      text-decoration: none;
-      border: none;
-      cursor: pointer;
-    }
-    .btn-primary {
-      background: #F97316;
-      color: #FFFFFF;
-    }
-    @media (max-width: 800px) {
-      .detail-grid {
-        grid-template-columns: 1fr;
+  styles: [
+    `
+      .order-detail-page {
+        max-width: 1100px;
+        margin: 0 auto;
+        padding: 32px 24px 64px;
       }
-    }
-  `]
+      .back-bar {
+        margin-bottom: 24px;
+      }
+      .btn-back {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        color: #64748b;
+        text-decoration: none;
+        font-weight: 600;
+        font-size: 0.9rem;
+        transition: color 0.15s;
+      }
+      .btn-back:hover {
+        color: #0f172a;
+      }
+      .detail-container {
+        display: flex;
+        flex-direction: column;
+        gap: 24px;
+      }
+      .summary-banner {
+        background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+        border-radius: 20px;
+        padding: 36px 32px;
+        color: #ffffff;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 20px;
+        box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.2);
+      }
+      .banner-info {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+      }
+      .banner-tag {
+        font-size: 0.75rem;
+        font-weight: 700;
+        color: #fb923c;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+      }
+      .order-code {
+        font-size: 2.25rem;
+        font-weight: 900;
+        margin: 0;
+        letter-spacing: -0.02em;
+      }
+      .order-timestamp {
+        font-size: 0.875rem;
+        color: #94a3b8;
+      }
+      .timeline-card,
+      .card {
+        background: #ffffff;
+        border: 1px solid #e2e8f0;
+        border-radius: 16px;
+        padding: 24px;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+      }
+      .card-section-title {
+        font-size: 1.1rem;
+        font-weight: 800;
+        color: #0f172a;
+        margin: 0 0 20px 0;
+      }
+      .detail-grid {
+        display: grid;
+        grid-template-columns: 1fr 340px;
+        gap: 24px;
+        align-items: flex-start;
+      }
+      .items-table-wrapper {
+        overflow-x: auto;
+      }
+      .items-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 0.9rem;
+      }
+      .items-table th {
+        text-align: left;
+        color: #64748b;
+        font-weight: 600;
+        font-size: 0.775rem;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+        padding-bottom: 12px;
+        border-bottom: 2px solid #f1f5f9;
+      }
+      .items-table td {
+        padding: 14px 0;
+        border-bottom: 1px solid #f1f5f9;
+        color: #334155;
+      }
+      .item-product-name {
+        display: block;
+        color: #0f172a;
+      }
+      .item-ref {
+        color: #94a3b8;
+        font-size: 0.75rem;
+      }
+      .item-subtotal-cell {
+        font-weight: 700;
+        color: #0f172a;
+      }
+      .text-center {
+        text-align: center;
+      }
+      .text-right {
+        text-align: right;
+      }
+      .foot-label {
+        font-weight: 700;
+        color: #0f172a;
+        font-size: 1rem;
+        padding-top: 16px;
+      }
+      .foot-total {
+        font-weight: 900;
+        font-size: 1.4rem;
+        color: #f97316;
+        padding-top: 16px;
+      }
+      .info-list {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+      }
+      .info-item {
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+      }
+      .info-label {
+        font-size: 0.75rem;
+        color: #94a3b8;
+        text-transform: uppercase;
+        font-weight: 600;
+      }
+      .info-val {
+        font-size: 0.95rem;
+        color: #0f172a;
+      }
+      .loading-box,
+      .not-found-card {
+        text-align: center;
+        padding: 64px 24px;
+        background: #ffffff;
+        border: 1px solid #e2e8f0;
+        border-radius: 16px;
+      }
+      .spinner {
+        width: 36px;
+        height: 36px;
+        border: 3px solid #e2e8f0;
+        border-top-color: #f97316;
+        border-radius: 50%;
+        animation: spin 0.8s linear infinite;
+        margin: 0 auto 16px;
+      }
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+      .btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 10px 20px;
+        border-radius: 10px;
+        font-weight: 600;
+        text-decoration: none;
+        border: none;
+        cursor: pointer;
+      }
+      .btn-primary {
+        background: #f97316;
+        color: #ffffff;
+      }
+      @media (max-width: 800px) {
+        .detail-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+    `,
+  ],
 })
 export class OrderDetailComponent implements OnInit {
   private readonly route = inject(ActivatedRoute);
@@ -342,7 +381,7 @@ export class OrderDetailComponent implements OnInit {
       },
       error: () => {
         this.isLoading.set(false);
-      }
+      },
     });
   }
 }

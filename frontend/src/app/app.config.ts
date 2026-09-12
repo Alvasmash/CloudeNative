@@ -2,19 +2,16 @@ import {
   ApplicationConfig,
   provideZoneChangeDetection,
   provideAppInitializer,
-  inject
+  inject,
 } from '@angular/core';
 
-import {
-  provideRouter,
-  withComponentInputBinding
-} from '@angular/router';
+import { provideRouter, withComponentInputBinding } from '@angular/router';
 
 import {
   provideHttpClient,
   withInterceptors,
   withInterceptorsFromDi,
-  HTTP_INTERCEPTORS
+  HTTP_INTERCEPTORS,
 } from '@angular/common/http';
 
 import {
@@ -24,7 +21,7 @@ import {
   MsalService,
   MsalGuard,
   MsalBroadcastService,
-  MsalInterceptor
+  MsalInterceptor,
 } from '@azure/msal-angular';
 
 import { routes } from './app.routes';
@@ -34,39 +31,29 @@ import { errorInterceptor } from './core/interceptors/error.interceptor';
 import {
   MSALInstanceFactory,
   MSALGuardConfigFactory,
-  MSALInterceptorConfigFactory
+  MSALInterceptorConfigFactory,
 } from './core/auth/msal.config';
 
-
 export const appConfig: ApplicationConfig = {
-
   providers: [
-
     // ============================================================
     // Angular
     // ============================================================
 
     provideZoneChangeDetection({
-      eventCoalescing: true
+      eventCoalescing: true,
     }),
 
-    provideRouter(
-      routes,
-      withComponentInputBinding()
-    ),
-
+    provideRouter(routes, withComponentInputBinding()),
 
     // ============================================================
     // HTTP
     // ============================================================
 
     provideHttpClient(
-      withInterceptors([
-        errorInterceptor
-      ]),
-      withInterceptorsFromDi()
+      withInterceptors([errorInterceptor]),
+      withInterceptorsFromDi(),
     ),
-
 
     // ============================================================
     // MSAL INTERCEPTOR
@@ -75,9 +62,8 @@ export const appConfig: ApplicationConfig = {
     {
       provide: HTTP_INTERCEPTORS,
       useClass: MsalInterceptor,
-      multi: true
+      multi: true,
     },
-
 
     // ============================================================
     // INSTANCIA MSAL
@@ -85,9 +71,8 @@ export const appConfig: ApplicationConfig = {
 
     {
       provide: MSAL_INSTANCE,
-      useFactory: MSALInstanceFactory
+      useFactory: MSALInstanceFactory,
     },
-
 
     // ============================================================
     // IMPORTANTE:
@@ -96,13 +81,10 @@ export const appConfig: ApplicationConfig = {
     // ============================================================
 
     provideAppInitializer(() => {
-
       const msalInstance = inject(MSAL_INSTANCE);
 
       return msalInstance.initialize();
-
     }),
-
 
     // ============================================================
     // CONFIGURACIÓN DEL GUARD
@@ -110,9 +92,8 @@ export const appConfig: ApplicationConfig = {
 
     {
       provide: MSAL_GUARD_CONFIG,
-      useFactory: MSALGuardConfigFactory
+      useFactory: MSALGuardConfigFactory,
     },
-
 
     // ============================================================
     // CONFIGURACIÓN DEL INTERCEPTOR
@@ -120,9 +101,8 @@ export const appConfig: ApplicationConfig = {
 
     {
       provide: MSAL_INTERCEPTOR_CONFIG,
-      useFactory: MSALInterceptorConfigFactory
+      useFactory: MSALInterceptorConfigFactory,
     },
-
 
     // ============================================================
     // SERVICIOS MSAL
@@ -130,8 +110,6 @@ export const appConfig: ApplicationConfig = {
 
     MsalService,
     MsalGuard,
-    MsalBroadcastService
-
-  ]
-
+    MsalBroadcastService,
+  ],
 };

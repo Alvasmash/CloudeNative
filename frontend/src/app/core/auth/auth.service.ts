@@ -1,4 +1,10 @@
-import { Injectable, signal, computed, inject, PLATFORM_ID } from '@angular/core';
+import {
+  Injectable,
+  signal,
+  computed,
+  inject,
+  PLATFORM_ID,
+} from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import { Router } from '@angular/router';
 import { MsalService, MsalBroadcastService } from '@azure/msal-angular';
@@ -6,7 +12,7 @@ import {
   EventMessage,
   EventType,
   AccountInfo,
-  AuthenticationResult
+  AuthenticationResult,
 } from '@azure/msal-browser';
 import { filter } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
@@ -16,7 +22,7 @@ import { ToastService } from '../services/toast.service';
 const DEMO_USER_STORAGE_KEY = 'pedidos360_demo_user';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class AuthService {
   private readonly msalService = inject(MsalService);
@@ -62,8 +68,8 @@ export class AuthService {
           (msg: EventMessage) =>
             msg.eventType === EventType.LOGIN_SUCCESS ||
             msg.eventType === EventType.ACQUIRE_TOKEN_SUCCESS ||
-            msg.eventType === EventType.ACTIVE_ACCOUNT_CHANGED
-        )
+            msg.eventType === EventType.ACTIVE_ACCOUNT_CHANGED,
+        ),
       )
       .subscribe((result: EventMessage) => {
         const payload = result.payload as AuthenticationResult;
@@ -97,16 +103,14 @@ export class AuthService {
 
     const roles: string[] = claims?.['roles'] || [];
 
-    const isAdmin =
-      roles.includes('ADMIN') ||
-      roles.includes('ROLE_ADMIN');
+    const isAdmin = roles.includes('ADMIN') || roles.includes('ROLE_ADMIN');
 
     const appUser: AppUser = {
       name: account.name || account.username || 'Usuario Azure AD',
       email: account.username || '',
       username: account.username || '',
       roles,
-      isAdmin
+      isAdmin,
     };
 
     this.currentUser.set(appUser);
@@ -126,13 +130,10 @@ export class AuthService {
 
     try {
       // Validar configuración de Azure
-      if (
-        environment.azure.clientId ===
-        'TU_AZURE_CLIENT_ID_PLACEHOLDER'
-      ) {
+      if (environment.azure.clientId === 'TU_AZURE_CLIENT_ID_PLACEHOLDER') {
         this.toastService.warning(
           'Azure AD no está configurado con Client ID real. Puedes usar el modo Demo para probar el sistema.',
-          'Configuración Azure'
+          'Configuración Azure',
         );
 
         return;
@@ -141,7 +142,7 @@ export class AuthService {
       const result = await this.msalService
         .loginPopup({
           scopes: environment.azure.loginScopes,
-          prompt: 'select_account'
+          prompt: 'select_account',
         })
         .toPromise();
 
@@ -151,21 +152,17 @@ export class AuthService {
         this.processAccount(result.account);
 
         this.toastService.success(
-          `Bienvenido/a, ${result.account.name || 'Usuario'}!`
+          `Bienvenido/a, ${result.account.name || 'Usuario'}!`,
         );
 
         await this.router.navigate(['/menu']);
       }
     } catch (err: any) {
-      console.error(
-        'Error durante login con Azure AD:',
-        err
-      );
+      console.error('Error durante login con Azure AD:', err);
 
       this.toastService.error(
-        err?.message ||
-        'No se pudo completar la autenticación con Microsoft',
-        'Error de Autenticación'
+        err?.message || 'No se pudo completar la autenticación con Microsoft',
+        'Error de Autenticación',
       );
     } finally {
       this.isLoading.set(false);
@@ -178,30 +175,25 @@ export class AuthService {
   async logout(): Promise<void> {
     this.currentUser.set(null);
 
-    sessionStorage.removeItem(
-      DEMO_USER_STORAGE_KEY
-    );
+    sessionStorage.removeItem(DEMO_USER_STORAGE_KEY);
 
     try {
-      const activeAccount =
-        this.msalService.instance.getActiveAccount();
+      const activeAccount = this.msalService.instance.getActiveAccount();
 
       if (activeAccount) {
         await this.msalService
           .logoutPopup({
-            account: activeAccount
+            account: activeAccount,
           })
           .toPromise();
       }
     } catch (err) {
       console.warn(
         'Error en logout de MSAL (posible sesión local limpia):',
-        err
+        err,
       );
     } finally {
-      this.toastService.info(
-        'Sesión cerrada correctamente'
-      );
+      this.toastService.info('Sesión cerrada correctamente');
 
       await this.router.navigate(['/login']);
     }
@@ -211,44 +203,30 @@ export class AuthService {
    * Modo Demostración / Evaluación Académica:
    * Permite a los evaluadores cambiar entre rol Cliente y Admin.
    */
-  setDemoUser(
-    role: 'ADMIN' | 'USER'
-  ): void {
+  setDemoUser(role: 'ADMIN' | 'USER'): void {
     const isAdmin = role === 'ADMIN';
 
     const demoUser: AppUser = {
-      name: isAdmin
-        ? 'Profesor / Administrador'
-        : 'Estudiante Duoc UC',
+      name: isAdmin ? 'Profesor / Administrador' : 'Estudiante Duoc UC',
 
-      email: isAdmin
-        ? 'admin.pedidos360@duocuc.cl'
-        : 'estudiante@duocuc.cl',
+      email: isAdmin ? 'admin.pedidos360@duocuc.cl' : 'estudiante@duocuc.cl',
 
-      username: isAdmin
-        ? 'admin.pedidos360'
-        : 'estudiante.duoc',
+      username: isAdmin ? 'admin.pedidos360' : 'estudiante.duoc',
 
-      roles: isAdmin
-        ? ['ROLE_ADMIN', 'ADMIN']
-        : ['ROLE_USER'],
+      roles: isAdmin ? ['ROLE_ADMIN', 'ADMIN'] : ['ROLE_USER'],
 
-      isAdmin
+      isAdmin,
     };
 
     this.currentUser.set(demoUser);
 
-    sessionStorage.setItem(
-      DEMO_USER_STORAGE_KEY,
-      JSON.stringify(demoUser)
-    );
+    sessionStorage.setItem(DEMO_USER_STORAGE_KEY, JSON.stringify(demoUser));
 
     this.toastService.success(
-      `Sesión iniciada en Modo Demo como ${isAdmin
-        ? 'ADMINISTRADOR (ROLE_ADMIN)'
-        : 'CLIENTE REGULAR'
+      `Sesión iniciada en Modo Demo como ${
+        isAdmin ? 'ADMINISTRADOR (ROLE_ADMIN)' : 'CLIENTE REGULAR'
       }`,
-      'Modo Demostración'
+      'Modo Demostración',
     );
 
     this.router.navigate(['/menu']);

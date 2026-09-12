@@ -1,6 +1,9 @@
 import { TestBed } from '@angular/core/testing';
 import { provideHttpClient } from '@angular/common/http';
-import { provideHttpClientTesting, HttpTestingController } from '@angular/common/http/testing';
+import {
+  provideHttpClientTesting,
+  HttpTestingController,
+} from '@angular/common/http/testing';
 import { OrderService } from './order.service';
 import { PedidoCreateDTO } from '../models/pedido-create.model';
 import { EstadoPedido } from '../models/estado-pedido.model';
@@ -15,8 +18,8 @@ describe('OrderService', () => {
       providers: [
         OrderService,
         provideHttpClient(),
-        provideHttpClientTesting()
-      ]
+        provideHttpClientTesting(),
+      ],
     });
     service = TestBed.inject(OrderService);
     httpMock = TestBed.inject(HttpTestingController);
@@ -30,9 +33,7 @@ describe('OrderService', () => {
     const payload: PedidoCreateDTO = {
       clienteNombre: 'Carlos Alumno',
       clienteEmail: 'carlos@duocuc.cl',
-      items: [
-        { productoId: 1, cantidad: 2 }
-      ]
+      items: [{ productoId: 1, cantidad: 2 }],
     };
 
     const mockResponse: Pedido = {
@@ -50,12 +51,12 @@ describe('OrderService', () => {
           productoNombre: 'Pizza Margherita',
           cantidad: 2,
           precioUnitario: 8990,
-          subtotal: 17980
-        }
-      ]
+          subtotal: 17980,
+        },
+      ],
     };
 
-    service.crearPedido(payload).subscribe(pedido => {
+    service.crearPedido(payload).subscribe((pedido) => {
       expect(pedido.id).toBe(10);
       expect(pedido.numeroPedido).toBe('PED-99A1B2C3');
       expect(pedido.estado).toBe(EstadoPedido.PENDIENTE);
@@ -68,7 +69,7 @@ describe('OrderService', () => {
   });
 
   it('debe listar los pedidos mediante GET /api/pedidos', () => {
-    service.getMisPedidos().subscribe(pedidos => {
+    service.getMisPedidos().subscribe((pedidos) => {
       expect(pedidos.length).toBeGreaterThanOrEqual(1);
     });
 
@@ -83,8 +84,8 @@ describe('OrderService', () => {
         fechaCreacion: '2026-09-11T10:00:00',
         estado: EstadoPedido.ENTREGADO,
         total: 16480,
-        items: []
-      }
+        items: [],
+      },
     ]);
   });
 });

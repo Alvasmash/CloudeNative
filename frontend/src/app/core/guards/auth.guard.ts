@@ -12,8 +12,11 @@ export const authGuard: CanActivateFn = (route, state) => {
     return true;
   }
 
-  toastService.warning('Debes iniciar sesión para acceder a esta página', 'Acceso Requerido');
+  toastService.warning(
+    'Debes iniciar sesión para acceder a esta página',
+    'Acceso Requerido',
+  );
   return router.createUrlTree(['/login'], {
-    queryParams: { returnUrl: state.url }
+    queryParams: { returnUrl: state.url },
   });
 };

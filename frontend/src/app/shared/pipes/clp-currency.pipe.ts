@@ -2,7 +2,7 @@
 
 @Pipe({
   name: 'clp',
-  standalone: true
+  standalone: true,
 })
 export class ClpCurrencyPipe implements PipeTransform {
   transform(value: number | null | undefined): string {

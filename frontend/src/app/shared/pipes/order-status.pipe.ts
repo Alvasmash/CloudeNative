@@ -1,9 +1,12 @@
 ﻿import { Pipe, PipeTransform } from '@angular/core';
-import { EstadoPedido, ESTADO_PEDIDO_CONFIG } from '../../core/models/estado-pedido.model';
+import {
+  EstadoPedido,
+  ESTADO_PEDIDO_CONFIG,
+} from '../../core/models/estado-pedido.model';
 
 @Pipe({
   name: 'orderStatus',
-  standalone: true
+  standalone: true,
 })
 export class OrderStatusPipe implements PipeTransform {
   transform(value: EstadoPedido | string | null | undefined): string {

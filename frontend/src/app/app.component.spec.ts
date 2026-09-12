@@ -14,7 +14,7 @@ describe('AppComponent', () => {
       'isAdmin',
       'userName',
       'userEmail',
-      'isDemoMode'
+      'isDemoMode',
     ]);
     mockAuthService.isAuthenticated.and.returnValue(false);
     mockAuthService.isAdmin.and.returnValue(false);
@@ -28,8 +28,8 @@ describe('AppComponent', () => {
         provideRouter([]),
         provideHttpClient(),
         provideHttpClientTesting(),
-        { provide: AuthService, useValue: mockAuthService }
-      ]
+        { provide: AuthService, useValue: mockAuthService },
+      ],
     }).compileComponents();
   });
 

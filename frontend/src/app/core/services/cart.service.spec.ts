@@ -11,7 +11,7 @@ describe('CartService', () => {
     descripcion: 'Deliciosa pizza tradicional',
     precio: 8990,
     categoria: 'Pizzas',
-    stock: 5
+    stock: 5,
   };
 
   const mockProductB: Producto = {
@@ -20,7 +20,7 @@ describe('CartService', () => {
     descripcion: 'Lata 350ml',
     precio: 1500,
     categoria: 'Bebidas',
-    stock: 20
+    stock: 20,
   };
 
   beforeEach(() => {
@@ -104,7 +104,10 @@ describe('CartService', () => {
     service.addItem(mockProductA, 2);
     service.addItem(mockProductB, 1);
 
-    const payload = service.buildCheckoutPayload('Nicolás García', 'nicolas@duocuc.cl');
+    const payload = service.buildCheckoutPayload(
+      'Nicolás García',
+      'nicolas@duocuc.cl',
+    );
 
     expect(payload.clienteNombre).toBe('Nicolás García');
     expect(payload.clienteEmail).toBe('nicolas@duocuc.cl');

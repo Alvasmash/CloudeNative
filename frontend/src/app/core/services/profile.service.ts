@@ -6,7 +6,7 @@ import { environment } from '../../../environments/environment';
 import { UserProfile } from '../models/user-profile.model';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class ProfileService {
   private readonly http = inject(HttpClient);
@@ -14,10 +14,10 @@ export class ProfileService {
 
   getUserProfile(): Observable<UserProfile | null> {
     return this.http.get<UserProfile>(this.apiUrl).pipe(
-      catchError(err => {
+      catchError((err) => {
         console.warn('Fallo llamada GET /api/profile:', err);
         return of(null);
-      })
+      }),
     );
   }
 }

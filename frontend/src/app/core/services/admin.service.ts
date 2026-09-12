@@ -12,7 +12,7 @@ import { ToastService } from './toast.service';
 const DEMO_ORDERS_KEY = 'pedidos360_demo_orders';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class AdminService {
   private readonly http = inject(HttpClient);
@@ -39,16 +39,19 @@ export class AdminService {
    */
   getDashboardData(): Observable<AdminDashboardResponse> {
     return this.http.get<AdminDashboardResponse>(this.apiUrl).pipe(
-      catchError(err => {
-        console.warn('Fallo GET /api/admin/pedidos, calculando metricas locales:', err);
+      catchError((err) => {
+        console.warn(
+          'Fallo GET /api/admin/pedidos, calculando metricas locales:',
+          err,
+        );
         const orders = this.getStoredOrders();
         const totalRecaudado = orders.reduce((sum, o) => sum + o.total, 0);
         return of({
           totalPedidos: orders.length,
           totalRecaudado,
-          pedidos: orders
+          pedidos: orders,
         });
-      })
+      }),
     );
   }
 
@@ -59,21 +62,28 @@ export class AdminService {
   actualizarEstado(id: number, nuevoEstado: EstadoPedido): Observable<Pedido> {
     const dto: EstadoPedidoDTO = { estado: nuevoEstado };
     return this.http.patch<Pedido>(`${this.apiUrl}/${id}/estado`, dto).pipe(
-      tap(actualizado => {
-        this.toastService.success(`Estado actualizado a ${nuevoEstado} para orden #${id}`);
+      tap((actualizado) => {
+        this.toastService.success(
+          `Estado actualizado a ${nuevoEstado} para orden #${id}`,
+        );
       }),
-      catchError(err => {
-        console.warn(`Fallo PATCH estado orden ${id}, aplicando localmente:`, err);
+      catchError((err) => {
+        console.warn(
+          `Fallo PATCH estado orden ${id}, aplicando localmente:`,
+          err,
+        );
         const orders = this.getStoredOrders();
-        const idx = orders.findIndex(o => o.id === Number(id));
+        const idx = orders.findIndex((o) => o.id === Number(id));
         if (idx !== -1) {
           orders[idx].estado = nuevoEstado;
           this.saveStoredOrders(orders);
-          this.toastService.success(`Estado actualizado localmente: ${nuevoEstado}`);
+          this.toastService.success(
+            `Estado actualizado localmente: ${nuevoEstado}`,
+          );
           return of(orders[idx]);
         }
         throw err;
-      })
+      }),
     );
   }
 
@@ -86,13 +96,18 @@ export class AdminService {
       tap(() => {
         this.toastService.success(`Pedido #${id} eliminado satisfactoriamente`);
       }),
-      catchError(err => {
-        console.warn(`Fallo DELETE pedido ${id}, eliminando de sesion local:`, err);
-        const orders = this.getStoredOrders().filter(o => o.id !== Number(id));
+      catchError((err) => {
+        console.warn(
+          `Fallo DELETE pedido ${id}, eliminando de sesion local:`,
+          err,
+        );
+        const orders = this.getStoredOrders().filter(
+          (o) => o.id !== Number(id),
+        );
         this.saveStoredOrders(orders);
         this.toastService.success(`Pedido #${id} eliminado de la vista local`);
         return of(void 0);
-      })
+      }),
     );
   }
 }

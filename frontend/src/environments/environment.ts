@@ -14,12 +14,13 @@ export const environment = {
     // URI de redireccion configurada como Single-Page Application (SPA) en Azure
     redirectUri: 'http://localhost:4200/redirect',
     // Authority de Microsoft Entra ID (usa el tenantId o 'common')
-    authority: 'https://login.microsoftonline.com/16c2a7cf-f000-475f-a847-f95ee0b36404',
+    authority:
+      'https://login.microsoftonline.com/16c2a7cf-f000-475f-a847-f95ee0b36404',
     // Scope delegado expuesto por el backend para crear pedidos
     apiScope: 'api://aef48164-1df8-49e6-b9f2-c1d8953ea200/recurso.write',
     // Scopes solicitados en el login basico
-    loginScopes: ['openid', 'profile', 'email']
+    loginScopes: ['openid', 'profile', 'email'],
   },
   // Permite evaluar y alternar roles (ADMIN / CLIENTE) incluso sin tenant activo de Azure
-  demoMode: true
+  demoMode: true,
 };

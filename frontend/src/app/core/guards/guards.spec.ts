@@ -1,5 +1,10 @@
 import { TestBed } from '@angular/core/testing';
-import { Router, ActivatedRouteSnapshot, RouterStateSnapshot, UrlTree } from '@angular/router';
+import {
+  Router,
+  ActivatedRouteSnapshot,
+  RouterStateSnapshot,
+  UrlTree,
+} from '@angular/router';
 import { authGuard } from './auth.guard';
 import { adminGuard } from './admin.guard';
 import { AuthService } from '../auth/auth.service';
@@ -14,16 +19,22 @@ describe('Route Guards', () => {
   const dummyState = { url: '/admin' } as RouterStateSnapshot;
 
   beforeEach(() => {
-    mockAuthService = jasmine.createSpyObj('AuthService', ['isAuthenticated', 'isAdmin']);
+    mockAuthService = jasmine.createSpyObj('AuthService', [
+      'isAuthenticated',
+      'isAdmin',
+    ]);
     mockRouter = jasmine.createSpyObj('Router', ['createUrlTree']);
-    mockToastService = jasmine.createSpyObj('ToastService', ['warning', 'error']);
+    mockToastService = jasmine.createSpyObj('ToastService', [
+      'warning',
+      'error',
+    ]);
 
     TestBed.configureTestingModule({
       providers: [
         { provide: AuthService, useValue: mockAuthService },
         { provide: Router, useValue: mockRouter },
-        { provide: ToastService, useValue: mockToastService }
-      ]
+        { provide: ToastService, useValue: mockToastService },
+      ],
     });
   });
 
@@ -31,7 +42,9 @@ describe('Route Guards', () => {
     it('debe permitir la navegación si el usuario está autenticado', () => {
       mockAuthService.isAuthenticated.and.returnValue(true);
 
-      const result = TestBed.runInInjectionContext(() => authGuard(dummyRoute, dummyState));
+      const result = TestBed.runInInjectionContext(() =>
+        authGuard(dummyRoute, dummyState),
+      );
       expect(result).toBeTrue();
     });
 
@@ -40,10 +53,12 @@ describe('Route Guards', () => {
       const fakeUrlTree = {} as UrlTree;
       mockRouter.createUrlTree.and.returnValue(fakeUrlTree);
 
-      const result = TestBed.runInInjectionContext(() => authGuard(dummyRoute, dummyState));
+      const result = TestBed.runInInjectionContext(() =>
+        authGuard(dummyRoute, dummyState),
+      );
       expect(result).toBe(fakeUrlTree);
       expect(mockRouter.createUrlTree).toHaveBeenCalledWith(['/login'], {
-        queryParams: { returnUrl: '/admin' }
+        queryParams: { returnUrl: '/admin' },
       });
       expect(mockToastService.warning).toHaveBeenCalled();
     });
@@ -54,7 +69,9 @@ describe('Route Guards', () => {
       mockAuthService.isAuthenticated.and.returnValue(true);
       mockAuthService.isAdmin.and.returnValue(true);
 
-      const result = TestBed.runInInjectionContext(() => adminGuard(dummyRoute, dummyState));
+      const result = TestBed.runInInjectionContext(() =>
+        adminGuard(dummyRoute, dummyState),
+      );
       expect(result).toBeTrue();
     });
 
@@ -64,7 +81,9 @@ describe('Route Guards', () => {
       const fakeUrlTree = {} as UrlTree;
       mockRouter.createUrlTree.and.returnValue(fakeUrlTree);
 
-      const result = TestBed.runInInjectionContext(() => adminGuard(dummyRoute, dummyState));
+      const result = TestBed.runInInjectionContext(() =>
+        adminGuard(dummyRoute, dummyState),
+      );
       expect(result).toBe(fakeUrlTree);
       expect(mockRouter.createUrlTree).toHaveBeenCalledWith(['/menu']);
       expect(mockToastService.error).toHaveBeenCalled();
@@ -75,10 +94,12 @@ describe('Route Guards', () => {
       const fakeUrlTree = {} as UrlTree;
       mockRouter.createUrlTree.and.returnValue(fakeUrlTree);
 
-      const result = TestBed.runInInjectionContext(() => adminGuard(dummyRoute, dummyState));
+      const result = TestBed.runInInjectionContext(() =>
+        adminGuard(dummyRoute, dummyState),
+      );
       expect(result).toBe(fakeUrlTree);
       expect(mockRouter.createUrlTree).toHaveBeenCalledWith(['/login'], {
-        queryParams: { returnUrl: '/admin' }
+        queryParams: { returnUrl: '/admin' },
       });
     });
   });
