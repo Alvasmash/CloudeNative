@@ -6,27 +6,21 @@ spring:
     name: pedidos360-backend
 
   datasource:
-    url: ${SPRING_DATASOURCE_URL:jdbc:h2:mem:pedidosdb;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE}
-    driverClassName: ${SPRING_DATASOURCE_DRIVER:org.h2.Driver}
-    username: ${SPRING_DATASOURCE_USERNAME:sa}
-    password: ${SPRING_DATASOURCE_PASSWORD:}
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://aws-0-us-west-2.pooler.supabase.com:5432/postgres}
+    driver-class-name: ${SPRING_DATASOURCE_DRIVER:org.postgresql.Driver}
+    username: ${SPRING_DATASOURCE_USERNAME:postgres.dxcboyfuwcpejgpnqton}
+    password: ${SPRING_DATASOURCE_PASSWORD}
 
   jpa:
-    database-platform: ${SPRING_JPA_PLATFORM:org.hibernate.dialect.H2Dialect}
+    database-platform: ${SPRING_JPA_PLATFORM:org.hibernate.dialect.PostgreSQLDialect}
     hibernate:
-      ddl-auto: ${SPRING_JPA_DDL_AUTO:create-drop}
+      ddl-auto: ${SPRING_JPA_DDL_AUTO:update}
     show-sql: false
     defer-datasource-initialization: true
 
   sql:
     init:
-      mode: always
-      data-locations: classpath:data.sql
-
-  h2:
-    console:
-      enabled: true
-      path: /h2-console
+      mode: never
 
 app:
   security:

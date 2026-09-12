@@ -1,0 +1,52 @@
+[1mdiff --git a/backend/src/main/resources/application.yml b/backend/src/main/resources/application.yml[m
+[1mindex 6264cae..b4bda88 100644[m
+[1m--- a/backend/src/main/resources/application.yml[m
+[1m+++ b/backend/src/main/resources/application.yml[m
+[36m@@ -6,27 +6,21 @@[m [mspring:[m
+     name: pedidos360-backend[m
+ [m
+   datasource:[m
+[31m-    url: ${SPRING_DATASOURCE_URL:jdbc:h2:mem:pedidosdb;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE}[m
+[31m-    driverClassName: ${SPRING_DATASOURCE_DRIVER:org.h2.Driver}[m
+[31m-    username: ${SPRING_DATASOURCE_USERNAME:sa}[m
+[31m-    password: ${SPRING_DATASOURCE_PASSWORD:}[m
+[32m+[m[32m    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://aws-0-us-west-2.pooler.supabase.com:5432/postgres}[m
+[32m+[m[32m    driver-class-name: ${SPRING_DATASOURCE_DRIVER:org.postgresql.Driver}[m
+[32m+[m[32m    username: ${SPRING_DATASOURCE_USERNAME:postgres.dxcboyfuwcpejgpnqton}[m
+[32m+[m[32m    password: ${SPRING_DATASOURCE_PASSWORD}[m
+ [m
+   jpa:[m
+[31m-    database-platform: ${SPRING_JPA_PLATFORM:org.hibernate.dialect.H2Dialect}[m
+[32m+[m[32m    database-platform: ${SPRING_JPA_PLATFORM:org.hibernate.dialect.PostgreSQLDialect}[m
+     hibernate:[m
+[31m-      ddl-auto: ${SPRING_JPA_DDL_AUTO:create-drop}[m
+[32m+[m[32m      ddl-auto: ${SPRING_JPA_DDL_AUTO:update}[m
+     show-sql: false[m
+     defer-datasource-initialization: true[m
+ [m
+   sql:[m
+     init:[m
+[31m-      mode: always[m
+[31m-      data-locations: classpath:data.sql[m
+[31m-[m
+[31m-  h2:[m
+[31m-    console:[m
+[31m-      enabled: true[m
+[31m-      path: /h2-console[m
+[32m+[m[32m      mode: never[m
+ [m
+ app:[m
+   security:[m
+[1mdiff --git a/frontend/src/environments/environment.ts b/frontend/src/environments/environment.ts[m
+[1mindex 0b1a4a3..bd391d0 100644[m
+[1m--- a/frontend/src/environments/environment.ts[m
+[1m+++ b/frontend/src/environments/environment.ts[m
+[36m@@ -5,7 +5,7 @@[m
+ export const environment = {[m
+   production: false,[m
+   // URL base de la API Spring Boot (o AWS API Gateway si aplica)[m
+[31m-  apiUrl: 'http://localhost:8080',[m
+[32m+[m[32m  apiUrl: 'https://jfbxfcaajg.execute-api.us-east-1.amazonaws.com',[m
+   azure: {[m
+     // Client ID / Application ID registrado en Azure Portal para la SPA[m
+     clientId: 'c1ceeea6-1f0a-46ba-b79d-ed659608feef',[m

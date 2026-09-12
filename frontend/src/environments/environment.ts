@@ -5,7 +5,7 @@
 export const environment = {
   production: false,
   // URL base de la API Spring Boot (o AWS API Gateway si aplica)
-  apiUrl: 'http://localhost:8080',
+  apiUrl: 'https://jfbxfcaajg.execute-api.us-east-1.amazonaws.com',
   azure: {
     // Client ID / Application ID registrado en Azure Portal para la SPA
     clientId: 'c1ceeea6-1f0a-46ba-b79d-ed659608feef',
