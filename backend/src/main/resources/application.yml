@@ -9,7 +9,7 @@ spring:
     url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://aws-0-us-west-2.pooler.supabase.com:5432/postgres}
     driver-class-name: ${SPRING_DATASOURCE_DRIVER:org.postgresql.Driver}
     username: ${SPRING_DATASOURCE_USERNAME:postgres.dxcboyfuwcpejgpnqton}
-    password: ${SPRING_DATASOURCE_PASSWORD}
+    password: ${SPRING_DATASOURCE_PASSWORD:Pedidos360@}
 
   jpa:
     database-platform: ${SPRING_JPA_PLATFORM:org.hibernate.dialect.PostgreSQLDialect}
