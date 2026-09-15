@@ -1,0 +1,1 @@
+import{Ga as t}from"./chunk-UELXTCAK.js";var i=class e{transform(r){return r==null||isNaN(r)?"$0":`$${Math.round(r).toString().replace(/\B(?=(\d{3})+(?!\d))/g,".")}`}static \u0275fac=function(n){return new(n||e)};static \u0275pipe=t({name:"clp",type:e,pure:!0})};export{i as a};
