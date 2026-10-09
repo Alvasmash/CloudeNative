@@ -7,7 +7,7 @@ export const environment = {
     clientId: 'c1ceeea6-1f0a-46ba-b79d-ed659608feef',
     tenantId: '16c2a7cf-f000-475f-a847-f95ee0b36404',
 
-    redirectUri: 'https://alvasmash.github.io/CloudeNative/redirect',
+    redirectUri: 'https://alvasmash.github.io/CloudNative/redirect',
 
     authority:
       'https://login.microsoftonline.com/16c2a7cf-f000-475f-a847-f95ee0b36404/v2.0',
@@ -18,4 +18,5 @@ export const environment = {
   },
 
   demoMode: false,
+  //me culeo a un weon 
 };
