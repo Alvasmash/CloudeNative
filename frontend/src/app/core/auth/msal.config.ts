@@ -14,6 +14,9 @@ import {
 
 import { environment } from '../../../environments/environment';
 
+// Guarda el error del retorno de Microsoft para mostrarlo en la pantalla de login
+export const AUTH_ERROR_STORAGE_KEY = 'pedidos360_auth_error';
+
 export function loggerCallback(logLevel: LogLevel, message: string): void {
   if (logLevel === LogLevel.Error) {
     console.error('[MSAL]', message);

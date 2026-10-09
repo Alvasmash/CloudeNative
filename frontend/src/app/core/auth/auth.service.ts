@@ -18,6 +18,7 @@ import { filter } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
 import { AppUser } from '../models/user-profile.model';
 import { ToastService } from '../services/toast.service';
+import { AUTH_ERROR_STORAGE_KEY } from './msal.config';
 
 const DEMO_USER_STORAGE_KEY = 'pedidos360_demo_user';
 
@@ -49,6 +50,14 @@ export class AuthService {
   }
 
   private initAuth(): void {
+    // 0. Mostrar el error del retorno de Microsoft, si lo hubo
+    const authError = sessionStorage.getItem(AUTH_ERROR_STORAGE_KEY);
+
+    if (authError) {
+      sessionStorage.removeItem(AUTH_ERROR_STORAGE_KEY);
+      this.toastService.error(authError, 'Error de Autenticación');
+    }
+
     // 1. Verificar si hay usuario demo almacenado
     const storedDemoUser = sessionStorage.getItem(DEMO_USER_STORAGE_KEY);
 
@@ -139,24 +148,15 @@ export class AuthService {
         return;
       }
 
-      const result = await this.msalService
-        .loginPopup({
-          scopes: environment.azure.loginScopes,
-          prompt: 'select_account',
-        })
-        .toPromise();
-
-      if (result?.account) {
-        this.msalService.instance.setActiveAccount(result.account);
-
-        this.processAccount(result.account);
-
-        this.toastService.success(
-          `Bienvenido/a, ${result.account.name || 'Usuario'}!`,
-        );
-
-        await this.router.navigate(['/menu']);
-      }
+      /*
+       * Redirección de página completa: el navegador sale hacia Microsoft
+       * y el retorno se procesa en el inicializador de app.config.ts.
+       * Se pide también el scope de la API para consentirlo en el login.
+       */
+      await this.msalService.instance.loginRedirect({
+        scopes: [...environment.azure.loginScopes, environment.azure.apiScope],
+        prompt: 'select_account',
+      });
     } catch (err: any) {
       console.error('Error durante login con Azure AD:', err);
 
@@ -181,11 +181,9 @@ export class AuthService {
       const activeAccount = this.msalService.instance.getActiveAccount();
 
       if (activeAccount) {
-        await this.msalService
-          .logoutPopup({
-            account: activeAccount,
-          })
-          .toPromise();
+        await this.msalService.instance.logoutRedirect({
+          account: activeAccount,
+        });
       }
     } catch (err) {
       console.warn(
