@@ -3,11 +3,9 @@ import { inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { catchError, throwError } from 'rxjs';
 import { ToastService } from '../services/toast.service';
-import { AuthService } from '../auth/auth.service';
 
 export const errorInterceptor: HttpInterceptorFn = (req, next) => {
   const toastService = inject(ToastService);
-  const authService = inject(AuthService);
   const router = inject(Router);
 
   /*
@@ -65,14 +63,11 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
         toastService.warning(errorMessage, '401 No Autorizado');
 
         /*
-         * No cerramos la sesión automáticamente para las rutas públicas.
-         *
-         * Un /public/** puede devolver errores sin que eso signifique
-         * que la sesión de Microsoft sea inválida.
+         * No cerramos la sesión automáticamente: un 401 del backend
+         * (issuer o audience distintos, token sin scope) no significa
+         * que la sesión de Microsoft sea inválida, y con logoutRedirect
+         * sacaría al usuario de la aplicación sin mostrar la causa.
          */
-        if (!isPublicRequest) {
-          authService.logout();
-        }
       } else if (error.status === 403) {
         errorMessage =
           error.error?.message ||

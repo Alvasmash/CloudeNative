@@ -32,6 +32,7 @@ import {
   MSALInstanceFactory,
   MSALGuardConfigFactory,
   MSALInterceptorConfigFactory,
+  AUTH_ERROR_STORAGE_KEY,
 } from './core/auth/msal.config';
 
 export const appConfig: ApplicationConfig = {
@@ -80,10 +81,35 @@ export const appConfig: ApplicationConfig = {
     // getAllAccounts(), loginPopup(), etc.
     // ============================================================
 
-    provideAppInitializer(() => {
+    provideAppInitializer(async () => {
       const msalInstance = inject(MSAL_INSTANCE);
 
-      return msalInstance.initialize();
+      await msalInstance.initialize();
+
+      /*
+       * La ruta /redirect es el Redirect Bridge: solo reenvía la respuesta
+       * de Microsoft a la página de origen. La respuesta se procesa allí,
+       * no en el bridge.
+       */
+      if (window.location.pathname.endsWith('/redirect')) {
+        return;
+      }
+
+      // Procesa el retorno de loginRedirect() / acquireTokenRedirect()
+      try {
+        const result = await msalInstance.handleRedirectPromise();
+
+        if (result?.account) {
+          msalInstance.setActiveAccount(result.account);
+        }
+      } catch (error: any) {
+        console.error('Error procesando el retorno de Microsoft:', error);
+
+        sessionStorage.setItem(
+          AUTH_ERROR_STORAGE_KEY,
+          error?.errorMessage || error?.message || 'Error de autenticación',
+        );
+      }
     }),
 
     // ============================================================
