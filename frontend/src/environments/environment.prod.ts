@@ -1,7 +1,7 @@
 export const environment = {
   production: true,
 
-  apiUrl: 'https://backend-pedidos-api.azurewebsites.net',
+  apiUrl: 'https://jfbxfcaajg.execute-api.us-east-1.amazonaws.com',
 
   azure: {
     clientId: 'c1ceeea6-1f0a-46ba-b79d-ed659608feef',
