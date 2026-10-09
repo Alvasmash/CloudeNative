@@ -1,0 +1,25 @@
+[1mdiff --git a/backend/src/main/resources/application.yml b/backend/src/main/resources/application.yml[m
+[1mindex 62b875d..fe1d3b7 100644[m
+[1m--- a/backend/src/main/resources/application.yml[m
+[1m+++ b/backend/src/main/resources/application.yml[m
+[36m@@ -26,4 +26,4 @@[m [mapp:[m
+   security:[m
+     issuer: ${JWT_ISSUER:https://login.microsoftonline.com/16c2a7cf-f000-475f-a847-f95ee0b36404/v2.0}[m
+     audience: ${JWT_AUDIENCE:aef48164-1df8-49e6-b9f2-c1d8953ea200}[m
+[31m-    allowed-origins: ${ALLOWED_ORIGINS:http://localhost:4200,http://localhost:5173,http://localhost:3000}[m
+\ No newline at end of file[m
+[32m+[m[32m    allowed-origins: ${ALLOWED_ORIGINS:http://localhost:4200,http://localhost:5173,http://localhost:3000,https://alvasmash.github.io}[m
+\ No newline at end of file[m
+[1mdiff --git a/frontend/src/environments/environment.prod.ts b/frontend/src/environments/environment.prod.ts[m
+[1mindex 5ffc091..2166461 100644[m
+[1m--- a/frontend/src/environments/environment.prod.ts[m
+[1m+++ b/frontend/src/environments/environment.prod.ts[m
+[36m@@ -1,7 +1,7 @@[m
+ export const environment = {[m
+   production: true,[m
+ [m
+[31m-  apiUrl: 'https://jfbxfcaajg.execute-api.us-east-1.amazonaws.com',[m
+[32m+[m[32m  apiUrl: 'https://backend-pedidos-api.azurewebsites.net',[m
+ [m
+   azure: {[m
+     clientId: 'c1ceeea6-1f0a-46ba-b79d-ed659608feef',[m
