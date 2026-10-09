@@ -33,7 +33,7 @@ jobs:
 
       - name: Compilar Angular
         working-directory: frontend
-        run: npm run build -- --base-href /CloudNative/
+        run: npm run build -- --base-href /CloudeNative/
 
       - name: Preparar GitHub Pages
         run: |
